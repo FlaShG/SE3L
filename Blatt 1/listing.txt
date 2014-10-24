@@ -1,0 +1,159 @@
+?- listing.
+
+:- dynamic message_hook/3.
+:- multifile message_hook/3.
+
+
+:- dynamic prolog_load_file/2.
+:- multifile prolog_load_file/2.
+
+
+:- dynamic mutter_von/2.
+
+mutter_von(marie, hans).
+mutter_von(marie, helga).
+mutter_von(julia, otto).
+mutter_von(barbara, klaus).
+mutter_von(barbara, andrea).
+mutter_von(charlotte, barbara).
+mutter_von(charlotte, magdalena).
+
+:- multifile message_property/2.
+
+
+:- thread_local thread_message_hook/3.
+:- dynamic thread_message_hook/3.
+:- volatile thread_message_hook/3.
+
+
+:- dynamic vater_von/2.
+
+vater_von(otto, hans).
+vater_von(otto, helga).
+vater_von(gerd, otto).
+vater_von(johannes, klaus).
+vater_von(johannes, andrea).
+vater_von(walter, barbara).
+vater_von(walter, magdalena).
+
+:- multifile prolog_list_goal/1.
+
+
+:- dynamic prolog_event_hook/1.
+:- multifile prolog_event_hook/1.
+
+
+:- dynamic file_search_path/2.
+:- multifile file_search_path/2.
+
+file_search_path(library, A) :-
+	library_directory(A).
+file_search_path(swi, A) :-
+	system:current_prolog_flag(home, A).
+file_search_path(foreign, swi(B)) :-
+    system:
+    (   current_prolog_flag(arch, A),
+	atom_concat('lib/', A, B)
+    ).
+file_search_path(foreign, swi(A)) :-
+    system:
+    (   (   current_prolog_flag(windows, true)
+	->  A=bin
+	;   A=lib
+	)
+    ).
+file_search_path(path, C) :-
+    system:
+    (   getenv('PATH', A),
+	(   current_prolog_flag(windows, true)
+	->  atomic_list_concat(B, ;, A)
+	;   atomic_list_concat(B, :, A)
+	),
+	'$member'(C, B)
+    ).
+file_search_path(user_profile, app_preferences('.')).
+file_search_path(app_data, A) :-
+	'$toplevel':catch(expand_file_name('~/lib/swipl', [A]), _, fail).
+file_search_path(app_preferences, A) :-
+	'$toplevel':catch(expand_file_name(~, [A]), _, fail).
+file_search_path(autoload, library('.')).
+file_search_path(pack, app_data(pack)).
+file_search_path(pack, swi(pack)).
+file_search_path(library, A) :-
+	'$pack':pack_dir(_, prolog, A).
+file_search_path(foreign, A) :-
+	'$pack':pack_dir(_, foreign, A).
+file_search_path(pce, A) :-
+	link_xpce:pcehome_(A).
+file_search_path(library, pce('prolog/lib')).
+file_search_path(foreign, pce(B)) :-
+    link_xpce:
+    (   current_prolog_flag(arch, A),
+	atom_concat('lib/', A, B)
+    ).
+
+:- dynamic prolog_file_type/2.
+:- multifile prolog_file_type/2.
+
+prolog_file_type(pl, prolog).
+prolog_file_type(prolog, prolog).
+prolog_file_type(qlf, prolog).
+prolog_file_type(qlf, qlf).
+prolog_file_type(A, executable) :-
+	system:current_prolog_flag(shared_object_extension, A).
+
+:- dynamic portray/1.
+:- multifile portray/1.
+
+
+:- dynamic expand_query/4.
+:- multifile expand_query/4.
+
+expand_query(A, B, C, D) :-
+	toplevel_variables:expand_query(A, B, C, D).
+
+:- dynamic expand_answer/2.
+:- multifile expand_answer/2.
+
+expand_answer(A, B) :-
+	toplevel_variables:expand_answer(A, B).
+
+:- dynamic resource/3.
+:- multifile resource/3.
+
+
+:- dynamic library_directory/1.
+:- multifile library_directory/1.
+
+library_directory(B) :-
+    '$parms':
+    (   cached_library_directory(local, A=lib, A),
+	B=A
+    ).
+library_directory(B) :-
+    '$parms':
+    (   cached_library_directory(user,
+				 expand_file_name('~/lib/prolog', [A]),
+				 A),
+	B=A
+    ).
+library_directory(B) :-
+    '$parms':
+    (   cached_library_directory(system,
+				 absolute_file_name(swi(library), A),
+				 A),
+	B=A
+    ).
+library_directory(B) :-
+    '$parms':
+    (   cached_library_directory(clp,
+				 absolute_file_name(swi('library/clp'), A),
+				 A),
+	B=A
+    ).
+
+:- dynamic exception/3.
+:- multifile exception/3.
+
+true.
+

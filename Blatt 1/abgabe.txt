@@ -1,0 +1,54 @@
+1.1
+
+?- [familie].
+% familie compiled 0.00 sec, 15 clauses
+true.
+
+Man muss Hochkommata benutzen, damit der Pfad als ein Ausdruck verstanden wird.
+
+1.2
+
+
+?- listing(mutter_von)
+|    .
+:- dynamic mutter_von/2.
+
+mutter_von(marie, hans).
+mutter_von(marie, helga).
+mutter_von(julia, otto).
+mutter_von(barbara, klaus).
+mutter_von(barbara, andrea).
+mutter_von(charlotte, barbara).
+mutter_von(charlotte, magdalena).
+
+true.
+
+1.3
+
+?- assert(mutter_von(helga,charlotte)).
+true.
+
+?- asserta(mutter_von(helga,charlotte)).
+true.
+
+?- assertz(mutter_von(helga,charlotte)).
+true.
+
+
+?- listing(mutter_von).
+:- dynamic mutter_von/2.
+
+mutter_von(helga, charlotte).
+mutter_von(marie, hans).
+mutter_von(marie, helga).
+mutter_von(julia, otto).
+mutter_von(barbara, klaus).
+mutter_von(barbara, andrea).
+mutter_von(charlotte, barbara).
+mutter_von(charlotte, magdalena).
+mutter_von(helga, charlotte).
+mutter_von(helga, charlotte).
+
+true.
+
+Assert fügt die Relation irgendwo in die Liste ein(meist am Ende), Asserta am Anfang und Assertz am Ende
