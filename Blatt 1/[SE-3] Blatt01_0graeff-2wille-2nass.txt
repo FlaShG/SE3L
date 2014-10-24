@@ -8,6 +8,7 @@ Man muss Hochkommata benutzen, damit der Pfad als ein Ausdruck verstanden wird.
 
 # 1.2
 
+Vollständiges Ergebnis von listing/0 siehe "[SE-3] Blatt01_0graeff-2wille-2nass listing.txt".
 
 ?- listing(mutter_von)
 |    .
