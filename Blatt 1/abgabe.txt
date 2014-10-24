@@ -1,4 +1,4 @@
-1.1
+# 1.1
 
 ?- [familie].
 % familie compiled 0.00 sec, 15 clauses
@@ -6,7 +6,7 @@ true.
 
 Man muss Hochkommata benutzen, damit der Pfad als ein Ausdruck verstanden wird.
 
-1.2
+# 1.2
 
 
 ?- listing(mutter_von)
@@ -23,7 +23,7 @@ mutter_von(charlotte, magdalena).
 
 true.
 
-1.3
+# 1.3
 
 ?- assert(mutter_von(helga,charlotte)).
 true.
@@ -52,3 +52,63 @@ mutter_von(helga, charlotte).
 true.
 
 Assert fügt die Relation irgendwo in die Liste ein(meist am Ende), Asserta am Anfang und Assertz am Ende
+
+# 2.1
+
+?- mutter_von(charlotte, barbara).
+true ;
+false.
+
+?- vater_von(walter, andrea).
+false.
+
+?- mutter_von(M, andrea).
+M = barbara.
+
+?- mutter_von(M, johannes).
+false.
+
+?- mutter_von(charlotte, K).
+K = barbara ;
+K = magdalena.
+
+?- mutter_von(M, K) ; vater_von(V, K).
+M = marie,
+K = hans ;
+M = marie,
+K = helga ;
+M = julia,
+K = otto ;
+M = barbara,
+K = klaus ;
+M = barbara,
+K = andrea ;
+M = charlotte,
+K = barbara ;
+M = charlotte,
+K = magdalena ;
+K = hans,
+V = otto ;
+K = helga,
+V = otto ;
+K = otto,
+V = gerd ;
+K = klaus,
+V = johannes ;
+K = andrea,
+V = johannes ;
+K = barbara,
+V = walter ;
+K = magdalena,
+V = walter.
+
+?- not(mutter_von(helga, K)).
+true.
+
+?- not(mutter_von(barbara, K)).
+false.
+
+?- mutter_von(barbara, K).
+K = klaus .
+
+Dies bedeutet implizit auch true.
