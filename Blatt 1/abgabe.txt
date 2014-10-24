@@ -112,3 +112,112 @@ false.
 K = klaus .
 
 Dies bedeutet implizit auch true.
+
+# 2.2
+
+?- mutter_von(charlotte, K), (mutter_von(K, EKM) ; vater_von(K, EKV)).
+K = barbara,
+EKM = klaus ;
+K = barbara,
+EKM = andrea ;
+false.
+
+# 2.3
+
+[trace] ?- mutter_von(charlotte, barbara).
+   Call: (6) mutter_von(charlotte, barbara) ? creep
+   Exit: (6) mutter_von(charlotte, barbara) ? creep
+true.
+
+[trace] ?- vater_von(walter, andrea).
+   Call: (6) vater_von(walter, andrea) ? creep
+   Fail: (6) vater_von(walter, andrea) ? creep
+false.
+
+[trace] ?- mutter_von(M, andrea).
+   Call: (6) mutter_von(_G506, andrea) ? creep
+   Exit: (6) mutter_von(barbara, andrea) ? creep
+M = barbara.
+
+[trace] ?- mutter_von(M, johannes).
+   Call: (6) mutter_von(_G518, johannes) ? creep
+   Fail: (6) mutter_von(_G518, johannes) ? creep
+false.
+
+[trace] ?- mutter_von(charlotte, K).
+   Call: (6) mutter_von(charlotte, _G525) ? creep
+   Exit: (6) mutter_von(charlotte, barbara) ? creep
+K = barbara .
+
+[trace] ?- mutter_von(M, K) ; vater_von(V, K).
+   Call: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(marie, hans) ? creep
+M = marie,
+K = hans ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(marie, helga) ? creep
+M = marie,
+K = helga ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(julia, otto) ? creep
+M = julia,
+K = otto ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(barbara, klaus) ? creep
+M = barbara,
+K = klaus ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(barbara, andrea) ? creep
+M = barbara,
+K = andrea ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(charlotte, barbara) ? creep
+M = charlotte,
+K = barbara ;
+   Redo: (7) mutter_von(_G768, _G769) ? creep
+   Exit: (7) mutter_von(charlotte, magdalena) ? creep
+M = charlotte,
+K = magdalena ;
+   Call: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(otto, hans) ? creep
+K = hans,
+V = otto ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(otto, helga) ? creep
+K = helga,
+V = otto ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(gerd, otto) ? creep
+K = otto,
+V = gerd ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(johannes, klaus) ? creep
+K = klaus,
+V = johannes ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(johannes, andrea) ? creep
+K = andrea,
+V = johannes ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(walter, barbara) ? creep
+K = barbara,
+V = walter ;
+   Redo: (7) vater_von(_G771, _G769) ? creep
+   Exit: (7) vater_von(walter, magdalena) ? creep
+K = magdalena,
+V = walter.
+
+[trace] ?- not(mutter_von(helga, K)).
+   Call: (7) mutter_von(helga, _G904) ? creep
+   Fail: (7) mutter_von(helga, _G904) ? creep
+true.
+
+[trace] ?- not(mutter_von(barbara, K)).
+   Call: (7) mutter_von(barbara, _G916) ? creep
+   Exit: (7) mutter_von(barbara, klaus) ? creep
+false.
+
+[trace] ?- mutter_von(barbara, K).
+   Call: (6) mutter_von(barbara, _G886) ? creep
+   Exit: (6) mutter_von(barbara, klaus) ? creep
+K = klaus .
