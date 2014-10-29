@@ -21,5 +21,3 @@
 % P1 und P2 sind Halbgeschwister, da sie denselben Vater haben, die Mutter
 % allerdings jeweils eine andere ist. Z ist bekannt als "der Stecher".
 
-
-%%%%% Aufgabe 2
