@@ -17,7 +17,7 @@
 % Sie haben dieselbe Großmutter - P1 väterlicher-, P2 mütterlicherseits.
 
 ?- mutter_von(X,P1),mutter_von(Y,P2),vater_von(Z,P1)
-|  ,vater_von(Z,P2),P1\=P2,X\=Y.
+   ,vater_von(Z,P2),P1\=P2,X\=Y.
 % P1 und P2 sind Halbgeschwister, da sie denselben Vater haben, die Mutter
 % allerdings jeweils eine andere ist. Z ist bekannt als "der Stecher".
 
