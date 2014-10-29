@@ -29,11 +29,16 @@
 % übernommen worden zu sein.
 
 %% 5.
-?-     produkt(PId, buch, Titel, Autor, Verlag, _, _),
+?- produkt(PId, buch, Titel, Autor, Verlag, _, _),
    not(produkt(_, hoerbuch, Titel, Autor, _, _, _)).
 % "Sonnenuntergang" von Sunsanne Hoffmann und "Blutrache" von Michael Wolf hatten noch nicht das Glück,
 % für die Zielgruppe der Analphabeten zugänglich gemacht worden zu sein.
 % Schreib' dich nicht ab. Lern' lesen und schreiben.
 
 %% 6.
-?- bagof(Lagerbestand, produkt(PId, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr, Lagerbestand), Bestaende).
+?- produkt(PId, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr, Lagerbestand),
+   not(
+    (produkt(_, _, _, _, _, _, LagerbestandGroesser),
+    LagerbestandGroesser > Lagerbestand)
+   ).
+% "Hoffnung" von Molly Sand ist mit 319 Stück im Lagerbestand am häufigsten vertreten.
