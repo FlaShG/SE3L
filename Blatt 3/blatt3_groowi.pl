@@ -91,4 +91,37 @@ anzahl_ladenhueter(Anzahl) :-
 
 %%%%% Aufgabe 4
 
+% 1.
+kategorien_mit_namen(Kategoriename, Schluessel) :-
+  kategorie(Schluessel, Kategoriename, _).
+
+% kategorien_mit_namen(+Kategoriename, -Schluessel)
+
+% 2.
+ist_keine_blattknoten_kategorie(KID) :-
+  not(not(kategorie(_, _, KID))).
+
+% ist_keine_blattknoten_kategorie(+KID)
+
+test_produkte_mit_illegaler_kategorie(PID) :-
+  produkt(PID, KID, _, _, _, _, _),
+  ist_keine_blattknoten_kategorie(KID).
+
+% test_produkte_mit_illegaler_kategorie(-PID)
+
+% 3.
+hat_gueltige_oberkategorie(KID) :-
+  kategorie(KID, _, OberKID),
+  KID =\= OberKID,
+  (
+    OberKID =:= 0;
+    hat_gueltige_oberkategorie(OberKID)
+  ).
+
+test_kategorien_mit_illegaler_oberkategorie(KID) :-
+  not(hat_gueltige_oberkategorie(KID)), KID.
+
+% test_kategorien_mit_illegaler_oberkategorie(-KID)
+
+
 

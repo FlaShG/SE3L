@@ -25,6 +25,10 @@ kategorie(19,lyrik,3).
 kategorie(20,bastelbuch,4).
 kategorie(21,woerterbuch,13).
 
+% von uns hinzugefügte kategorien mit fehlerhafter oberkategorie
+kategorie(22,fehlerheftchen,22).
+kategorie(23,fehlertaschenbuch,2200).
+
 % produkt(PId,KId,Titel,Autor,Verlag,Jahr,Lagerbestand).
 produkt(12345,10,sonnenuntergang,hoffmann_susanne,meister,2005,23).
 produkt(12346,18,hoffnung,sand_molly,kasper,2004,319).
@@ -38,6 +42,9 @@ produkt(23458,8,blutrache,wolf_michael,meister,2010,1).
 
 produkt(34567,19,hoffnung,sand_molly,audio,2008,51).
 produkt(34568,9,winterzeit,wolf_michael,audio,2006,16).
+
+% von uns hinzugefügtes buch mit fehlerhafter kategorie.
+produkt(1337,1,fehlerhaft,clancy_tom,knecht,2015,42).
 
 
 % verkauft(PId,Jahr,Preis,Anzahl).
