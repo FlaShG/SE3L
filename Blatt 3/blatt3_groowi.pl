@@ -9,7 +9,8 @@
 
 %%%%% Aufgabe 2
 
-[medien].
+% Wir geben das aktuelle Jahr bei der Benutzung des Prädikats an.
+% Der Parameter "Jahr" kriegt also aktuell den Wert 2014.
 
 % 1.
 produkte_mit_preissteigerung(Jahr, PID, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr) :-
@@ -30,3 +31,97 @@ erstmals_im_katalog(PID, ErstesJahr) :-
       JahrDavor < ErstesJahr)).
 
 % erstmals_im_katalog(+PID, -ErstesJahr)
+
+% Hier ist das aktuelle Jahr "2014" hardcoded.
+% Grund ist die Formulierung der Aufgabe.
+
+% 3.
+ladenhueter(PID, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr) :-
+  produkt(PID, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr, Bestand),
+  not((verkauft(PID, VorZweiJahren, _, _),
+      VorZweiJahren < 2013)),
+  verkauft(PID, 2013, _, VorjahrVerkauft),
+  Bestand > 2 * VorjahrVerkauft.
+
+% ladenhueter(-PID, -Kategorie, -Titel, -Autor, -Verlag, -Erscheinungsjahr)
+
+
+%%%%% Aufgabe 3
+
+% 1.
+% Dieses Hilfsprädikat sucht die Id von je einem Produkt unter 10 Euro.
+% "Kostet aktuell 10 euro" setzen wir gleich mit "kostete 2013 unter 10 euro",
+% da alles andere mit dieser Datenbasis relativ wenig Sinn ergibt.
+produkt_unter_10_euro(PID) :-
+  produkt(PID, _, _, _, _, _, _),
+  verkauft(PID, 2013, Preis, _),
+  Preis < 10.
+  
+% produkt_unter_10_euro(-PID)
+  
+anzahl_produkte_unter_10_euro(Anzahl) :-
+  aggregate_all(count, produkt_unter_10_euro(_), Anzahl).
+
+% anzahl_produkte_unter_10_euro(-Anzahl)
+
+% 2.
+% Dieses Hilfsprädikat findet lediglich dem Umsatz eines Produkts zu einem besitmmten
+% Jahr. Es könnte auch anderweitig benutzt werden, um weitere Daten zu erhalten,
+% wie "in welchem Jahr hatte Produkt PID den Umsatz Umsatz?".
+jahresumsatz(PID, Jahr, Umsatz) :-
+  verkauft(PID, Jahr, Preis, Verkauft),
+  Umsatz is Preis * Verkauft.
+  
+% jahresumsatz(?PID, ?Jahr, ?Umsatz)
+
+gesamtumsatz_unter_500_euro(PID, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr) :-
+  produkt(PID, Kategorie, Titel, Autor, Verlag, Erscheinungsjahr, _),
+  aggregate_all(sum(Umsatz), jahresumsatz(PID, _, Umsatz), Gesamtumsatz),
+  Gesamtumsatz < 500.
+  
+% gesamtumsatz_unter_500_euro(-PID, -Kategorie, -Titel, -Autor, -Verlag, -Erscheinungsjahr)
+
+
+% 3.
+anzahl_ladenhueter(Anzahl) :-
+  aggregate_all(count, ladenhueter(_, _, _, _, _, _), Anzahl).
+  
+% anzahl_ladenhueter(-Anzahl)
+
+
+%%%%% Aufgabe 4
+
+% 1.
+kategorien_mit_namen(Kategoriename, Schluessel) :-
+  kategorie(Schluessel, Kategoriename, _).
+
+% kategorien_mit_namen(+Kategoriename, -Schluessel)
+
+% 2.
+ist_keine_blattknoten_kategorie(KID) :-
+  not(not(kategorie(_, _, KID))).
+
+% ist_keine_blattknoten_kategorie(+KID)
+
+test_produkte_mit_illegaler_kategorie(PID) :-
+  produkt(PID, KID, _, _, _, _, _),
+  ist_keine_blattknoten_kategorie(KID).
+
+% test_produkte_mit_illegaler_kategorie(-PID)
+
+% 3.
+hat_gueltige_oberkategorie(KID) :-
+  kategorie(KID, _, OberKID),
+  KID =\= OberKID,
+  (
+    OberKID =:= 0;
+    hat_gueltige_oberkategorie(OberKID)
+  ).
+
+test_kategorien_mit_illegaler_oberkategorie(KID) :-
+  not(hat_gueltige_oberkategorie(KID)), KID.
+
+% test_kategorien_mit_illegaler_oberkategorie(-KID)
+
+
+
