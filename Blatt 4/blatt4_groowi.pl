@@ -3,20 +3,23 @@
 %% A ist das Geburtsdatum von B
 %
 
-%% A ist im Turnier gegen B angetrete
+%% A ist im Turnier gegen B angetreten
 % symmetrisch
 
-%% A is älter als B
-% 
+%% A ist älter als B
+% transitiv
 
 %% A und B sind Geschwister
 % symmetrisch
+% transitiv
 
 %% A ist eine (echte oder unechte) Teilmenge von B
-% kann reflexiv und symmetrisch sein, wenn A=B
+% transitiv
 
 %% A und B sind in der gleichen Straße
-% immer symmetrisch, kann auch reflexiv sein, wenn A=B
+% symmetrisch
+% reflexiv
+% transitiv
 
 %%%%% Aufgabe 2
 
