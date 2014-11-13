@@ -22,4 +22,14 @@
 % transitiv
 
 %%%%% Aufgabe 2
+%Findet alle Vorfahren einer Person.
+%Es ist richtungsunabhängig und 
 
+ist_vorfahre(Vorfahre, Nachkommender) :-
+mutter_von(Vorfahre,Nachkommender);
+vater_von(Vorfahre,Nachkommender).
+
+vorfahren_von(Vorfahre, Nachkommende) :- 
+ist_vorfahre(Vorfahre, Nachkommende);
+vorfahren_von(X, Nachkommende),
+ist_vorfahre(X, Nachkommende).
