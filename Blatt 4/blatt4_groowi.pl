@@ -23,7 +23,7 @@
 
 %%%%% Aufgabe 2
 %Findet alle Vorfahren einer Person.
-%Es ist richtungsunabhängig und 
+%Es ist richtungsunabhängig und terminierungssicher
 
 ist_vorfahre(Vorfahre, Nachkommender) :-
 mutter_von(Vorfahre,Nachkommender);
