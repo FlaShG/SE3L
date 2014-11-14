@@ -71,7 +71,7 @@ arbeitsschritt(Produkt1,_,_,Produkt2);
     voraussetzung_safe_helper(Produkt1,X,ProduktZwei)
 ).
 
-% Zum Testen bitte einkommentieren:
+% Zum Testen bitte in galaxy.pl einfügen:
 % arbeitsschritt(galaxy2004,1,recycling,hyper_squeezer).
 
 %%%% 4)
@@ -97,3 +97,22 @@ findall(Produkt,
         ),
         Liste),
 sort(Liste, Endprodukte).
+
+%%%% 5)
+fertigungstiefe(Teil1, Teil2, 1) :-
+    arbeitsschritt(Teil1, _, _, Teil2).
+    
+fertigungstiefe(Teil1, Teil2, Tiefe) :-
+    not(arbeitsschritt(Teil1, _, _, Teil2)),
+    arbeitsschritt(Teil1, _, _, X),
+    fertigungstiefe(X, Teil2, TiefereTiefe),
+    Tiefe is TiefereTiefe + 1.
+
+% Mit diesen zusätzlichen Daten in galaxy.pl findet dieses Prädikat
+% beim Aufruf mit fertigungstiefe(box0815, galaxy2004, Tiefe)
+% mehrere Tiefen (3 und 4):
+%
+% arbeitsschritt(box0815,1,montagewurst,zwischending).
+% arbeitsschritt(zwischending,1,montagewurst,box0816).
+
+%%%% 6)
