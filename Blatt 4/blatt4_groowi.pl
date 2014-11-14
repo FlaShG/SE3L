@@ -48,6 +48,7 @@ arbeitsschritt(X,_,_,Produkt2),
 voraussetzung(Produkt1,X)
 ).
 
+
 %%%% 2)
 % wird_benoetigt_von gibt die benoetigten Teile fuer ein endprodukt
 % kann dazu benutzt werden, um bei nicht mehr lieferbaren Teilen betroffenen Endprodukte zu finden
@@ -74,3 +75,25 @@ arbeitsschritt(Produkt1,_,_,Produkt2);
 % arbeitsschritt(galaxy2004,1,recycling,hyper_squeezer).
 
 %%%% 4)
+voraussetzung_mit_maschine(Produkt1,Maschine,Produkt2) :-
+arbeitsschritt(Produkt1,_,Maschine,Produkt2);
+(
+    (
+        arbeitsschritt(X,_,Maschine,Produkt2),
+        voraussetzung(Produkt1,X)
+    );
+    (
+        arbeitsschritt(X,_,AndereMaschine,Produkt2),
+        AndereMaschine \= Maschine,
+        voraussetzung_mit_maschine(Produkt1,Maschine,X)
+    )
+).
+
+% Dieses Prädikat ermittelt die in der Aufgabe gesuchten Ergebnisse:
+maschinenausfall_beeinflusst_herstellung_von(Maschine, Endprodukte) :-
+findall(Produkt,
+        (endprodukt(Produkt),
+         voraussetzung_mit_maschine(_, Maschine, Produkt)
+        ),
+        Liste),
+sort(Liste, Endprodukte).
