@@ -50,9 +50,27 @@ voraussetzung(Produkt1,X)
 
 %%%% 2)
 % wird_benoetigt_von gibt die benoetigten Teile fuer ein endprodukt
-% kann dazu benutzt werden, um bei nicht mehr lieferbaren Teilen betroffenen Endprodukte zufinden
+% kann dazu benutzt werden, um bei nicht mehr lieferbaren Teilen betroffenen Endprodukte zu finden
 wird_benoetigt_von(Teil,Produkt) :-
 voraussetzung(Teil,Produkt),
 endprodukt(Produkt).
 
 %%%% 3)
+% vorraussetzung/2 terminiert genau dann sicher, wenn es keinen Fall vorraussetzung(X, _, _ X) gibt,
+% also vorraussetzung/2 nicht reflexiv ist.
+% vorraussetzung/2 könnte so abgeändert werden, um dies zu testen:
+voraussetzung_safe(Produkt1,Produkt2) :-
+voraussetzung_safe_helper(Produkt1,Produkt2,Produkt2).
+
+voraussetzung_safe_helper(Produkt1,Produkt2,ProduktZwei) :-
+arbeitsschritt(Produkt1,_,_,Produkt2);
+(
+    arbeitsschritt(X,_,_,Produkt2),
+    not(X = ProduktZwei),
+    voraussetzung_safe_helper(Produkt1,X,ProduktZwei)
+).
+
+% Zum Testen bitte einkommentieren:
+% arbeitsschritt(galaxy2004,1,recycling,hyper_squeezer).
+
+%%%% 4)
