@@ -21,6 +21,7 @@
 % reflexiv
 % transitiv
 
+
 %%%%% Aufgabe 2
 %Findet alle Vorfahren einer Person.
 %Es ist richtungsunabhängig, da auch ein Vorfahre oder nur Variablen eigegeben werden können und das Prädikat auch dafür die richtigen Ergebnisse liefert
@@ -32,5 +33,11 @@ vater_von(Vorfahre,Nachkommender).
 
 ist_vorfahre(Vorfahre, Nachkommende) :- 
 direkter_vorfahre_von(Vorfahre, Nachkommende);
-ist_vorfahre(Vorfahre, X),
-direkter_vorfahre_von(X, Nachkommende).
+(
+direkter_vorfahre_von(X, Nachkommende),
+ist_vorfahre(Vorfahre, X)
+).
+
+
+%%%%% Aufgabe 3
+
