@@ -116,6 +116,7 @@ fertigungstiefe(Teil1, Teil2, Tiefe) :-
 % arbeitsschritt(zwischending,1,montagewurst,box0816).
 
 %%%% 6)
+% Gibt alle Paare an Komponenten und Endprodukten aus, fuer die es mehrere Produktionswege gibt.
 hat_mehrere_fertigungspfade_zu(Teil1, Teil2) :-
     (
         arbeitsschritt(Teil1, _, MaschineA, TeilA),
