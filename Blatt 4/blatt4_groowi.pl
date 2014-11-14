@@ -40,4 +40,19 @@ ist_vorfahre(Vorfahre, X)
 
 
 %%%%% Aufgabe 3
+%%%% 1)
+voraussetzung(Produkt1,Produkt2) :-
+arbeitsschritt(Produkt1,_,_,Produkt2);
+(
+arbeitsschritt(X,_,_,Produkt2),
+voraussetzung(Produkt1,X)
+).
 
+%%%% 2)
+% wird_benoetigt_von gibt die benoetigten Teile fuer ein endprodukt
+% kann dazu benutzt werden, um bei nicht mehr lieferbaren Teilen betroffenen Endprodukte zufinden
+wird_benoetigt_von(Teil,Produkt) :-
+voraussetzung(Teil,Produkt),
+endprodukt(Produkt).
+
+%%%% 3)
