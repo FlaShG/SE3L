@@ -116,3 +116,18 @@ fertigungstiefe(Teil1, Teil2, Tiefe) :-
 % arbeitsschritt(zwischending,1,montagewurst,box0816).
 
 %%%% 6)
+hat_mehrere_fertigungspfade_zu(Teil1, Teil2) :-
+    (
+        arbeitsschritt(Teil1, _, MaschineA, TeilA),
+        arbeitsschritt(Teil1, _, MaschineB, TeilB),
+        (
+            TeilA \= TeilB;
+            MaschineA \= MaschineB
+        ),
+        voraussetzung(TeilA, Teil2),
+        voraussetzung(TeilB, Teil2)
+    );
+    (
+        arbeitsschritt(Teil1, _, _, X),
+        hat_mehrere_fertigungspfade_zu(X, Teil2)
+    ).
