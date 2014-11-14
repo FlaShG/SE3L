@@ -26,11 +26,11 @@
 %Es ist richtungsunabhängig, da auch ein Vorfahre oder nur Variablen eigegeben werden können und das Prädikat auch dafür die richtigen Ergebnisse liefert
 %Es ist terminierungssicher, solang sich in der Datenbank keine Schleifen befinden, die in dieser Datenbank nicht auftreten sollten.
 
-ist_vorfahre(Vorfahre, Nachkommender) :-
+direkter_vorfahre_von(Vorfahre, Nachkommender) :-
 mutter_von(Vorfahre,Nachkommender);
 vater_von(Vorfahre,Nachkommender).
 
-vorfahren_von(Vorfahre, Nachkommende) :- 
-ist_vorfahre(Vorfahre, Nachkommende);
-vorfahren_von(X, Nachkommende),
-ist_vorfahre(X, Nachkommende).
+ist_vorfahre(Vorfahre, Nachkommende) :- 
+direkter_vorfahre_von(Vorfahre, Nachkommende);
+ist_vorfahre(Vorfahre, X),
+direkter_vorfahre_von(X, Nachkommende).
