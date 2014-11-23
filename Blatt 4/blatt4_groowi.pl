@@ -1,7 +1,7 @@
 %%%%% Aufgabe 1
 
 %% A ist das Geburtsdatum von B
-%
+% 
 
 %% A ist im Turnier gegen B angetreten
 % symmetrisch
@@ -79,7 +79,7 @@ voraussetzung_mit_maschine(Produkt1,Maschine,Produkt2) :-
 arbeitsschritt(Produkt1,_,Maschine,Produkt2);
 (
     (
-        arbeitsschritt(X,_,Maschine,Produkt2),
+        arbeitsschritt(X,_,Martseiteschine,Produkt2),
         voraussetzung(Produkt1,X)
     );
     (
