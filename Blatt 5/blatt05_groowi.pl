@@ -178,3 +178,84 @@ add(s(X), Y, s(R)) :-
 %    peano(X),
 %    peano(Y),
 %    peano(R).
+
+
+%%%%% Aufgabe 3
+
+% erste Version (nach dem Hinweis in der Aufgabe)
+% uebergeordnet(+Kategorie, -Ueberkategorie)
+
+uebergeordnet(Kategorie, Ueberkategorie) :- sub(Kategorie, _, Ueberkategorie).
+uebergeordnet(Kategorie, Ueberkategorie) :-
+    sub(Kategorie, _, X),
+    uebergeordnet(X, Ueberkategorie).
+    
+    
+% zweite Version
+% ebene_von(?Ebene, ?Kategorie)
+ebene_von(Ebene, Kategorie) :- sub(Kategorie, Ebene, _). 
+ebene_von(Ebene, Kategorie) :-
+    reich(Kategorie),
+    Ebene = reich.
+
+uebergeordnet(Kategorie, Ebene, Ueberkategorie) :-
+    (
+        sub(Kategorie, _, Ueberkategorie);
+        (
+            sub(Kategorie, _, X),
+            uebergeordnet(X, _, Ueberkategorie)
+        )
+    ),
+    ebene_von(Ebene, Ueberkategorie).
+    
+% ?- uebergeordnet(menschenfloh, Ebene, Ist).
+% Ebene = gattung,
+% Ist = pulex ;
+% Ebene = familie,
+% Ist = pulicidae ;
+% Ebene = ordnung,
+% Ist = floehe ;
+% Ebene = klasse,
+% Ist = insekten ;
+% Ebene = stamm,
+% Ist = gliederfuesser ;
+% Ebene = reich,
+% Ist = vielzeller ;
+% false.
+
+
+%%%%% Aufgabe 4
+% 4.1
+% fertigungstiefen(?TeilA, ?TeilB, ?Tiefe)
+fertigungstiefen(Teil, Teil, 0).
+fertigungstiefen(TeilA, TeilB, 1) :-
+    arbeitsschritt(TeilA, _, _, TeilB).
+    
+fertigungstiefen(TeilA, TeilB, Tiefe) :-
+    arbeitsschritt(X, _, _, TeilB),
+    TeilA \= X,
+    fertigungstiefen(TeilA, X, BisDahin),
+    Tiefe is BisDahin + 1.
+
+% 4.3
+% TeilA muss kein Zulieferteil sein, TeilB kein Endprodukt,
+% da diese Vorgabe diese Prädikat ausschließlich eingeschränkt hätte.
+
+% Dieses Prädikat ermittelt für jeden Fertigungspfad zwischen TeilA und TeilB
+% die Anzahl der TeilA, die auf diesem Pfad gebraucht werden.
+wird_benoetigt_fuer(TeilA, TeilB, Anzahl) :-
+    arbeitsschritt(TeilA, Anzahl, _, TeilB).
+    
+wird_benoetigt_fuer(TeilA, TeilB, Anzahl) :-
+    arbeitsschritt(TeilA, AnzahlAInX, _, X),
+    wird_benoetigt_fuer(X, TeilB, AnzahlXInB),
+    Anzahl is AnzahlAInX * AnzahlXInB.
+    
+benoetigte_Anzahl(TeilA, TeilB, Anzahl) :-
+    findall(Anzahl1,
+        wird_benoetigt_fuer(TeilA, TeilB, Anzahl1),
+        Liste),
+    sum_list(Liste, Anzahl).
+
+% Dieses Prädikat bildet die Summer aller Ergebnisse von wird_benoetigt_fuer,
+% also die Summe aller TeilA, die auf allen Pfaden zusammen in TeilB landen.
