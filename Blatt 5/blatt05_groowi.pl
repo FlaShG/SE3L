@@ -2,59 +2,56 @@
 
 %%%%% Aufgabe 1
 
-%n(F, g)       n(k, G)
-%n/2 = n/2
-%F = k, G = g
-%n(k, g)       n(k, g)
-%unifikation erfolgreich
+% n(F, g) = n(k, G) ?
+% n/2 = n/2
+% F = k, G = g
+% n(k, g) = n(k, g)
+% Unifikation erfolgreich
 
-%p(B, B)       p(i, j)
-%p/2 = p/2
-%B = i
-%unifizieren schlägt fehl
-%Grund: B wird mit i belegt und kann dann nicht noch mit j belegt werden.
+% p(B, B) = p(i, j) ?
+% p/2 = p/2
+% B = i
+% Unifizieren schlägt fehl
+% Grund: B wird mit i belegt und kann dann nicht noch mit j belegt werden.
 
+% r(r(d, D), r(D, d)) = r(r(E, e), r(e, E) ?
+% r/2 = r/2
+% r(r/2, r/2) = r(r/2, r/2)
+% n(F, g) = n(k, G)?
+% n/2 = n/2
+% F = k, G = g
+% n(k, g) = n(k, g)
+% Unifikation erfolgreich
 
-%r(r(d, D), r(D, d))         r(r(E, e), r(e, E)
-%r/2 = r/2
-%r(r/2, r/2) = r(r/2, r/2)
-%n(F, g)       n(k, G)
-%n/2 = n/2
-%F = k, G = g
-%n(k, g)       n(k, g)
-%unifikation erfolgreich
+% p(B, B) = p(i, j) ?
+% p/2 = p/2
+% B = i
+% Unifizieren schlägt fehl
+% Grund: B wird mit i belegt und kann dann nicht noch mit j belegt werden.
 
-%p(B, B)       p(i, j)
-%p/2 = p/2
-%B = i
-%unifizieren schlägt fehl
-%Grund: B wird mit i belegt und kann dann nicht noch mit j belegt werden.
+% r(r(d, D), r(D, d)) = r(r(E, e), r(e, E) ?
+% r/2 = r/2
+% r(r/2, r/2) = r(r/2, r/2)
+% D = e, E = d
+% r(r(d, e), r(e, d) = r(r(d, e), r(e, d))
+% Unifikation erfolgreich
 
+% m(t(X, Y), X, c(g), h(Y)) = m(t(r, s), r, h(g(T))) ?
+% m/4 =/= m/3
+% Unifizieren schlägt fehl
+% Grund: m/4 und m/3 passen nicht zusammen
 
-%r(r(d, D), r(D, d))         r(r(E, e), r(e, E)
-%r/2 = r/2
-%r(r/2, r/2) = r(r/2, r/2)
-%D = e, E = d
-%r(r(d, e), r(e, d) = r(r(d, e), r(e, d))
-%unifizieren läuft
-
-
-%m(t(X, Y), X, c(g), h(Y))        m(t(r, s), r, h(g(T)))
-%m/4 =/= m/3
-%unifizieren schlägt fehl
-%Grund: m/4 und m/3 passen nicht zusammen
-
-
-%false    not(true)
-%not(true) = false
-%false = false
-%läuft
+% false = not(true) ?
+% not(true) = false
+% false = false
+% Unifikation erfolgreich
 
 
-%False     not(true)
-%False = false, not(true) = false
-%false = false
-%läuft
+% False = not(true) ?
+% False = false, not(true) = false
+% false = false
+% Unifikation erfolgreich
+
 
 %%%%% Aufgabe 2
 % 0 ist eine Peano Zahl
@@ -64,27 +61,29 @@ peano(0).
 peano(s(P)) :- peano(P).
 
 % Der Vorgaenger einer Peano Zahl ist gegeben, wenn die Peano Zahl der Nachfolger des Vorgaengers ist.
+% p(?P, ?Vorgaenger)
 p(P, Vorgaenger) :- P = s(Vorgaenger).
 % Vorgaenger von s(s(0)):
 % ?- p(s(s(0)),X). 
 % X = s(0).
 
-% Prueft ob, Peano2 das Minimum der beiden Zahlen ist.
-% groessergleich(Peano1, Peano2)
+% Von der Idee her von lt/2 aus dem Skript übernommen.
+% Zusätzlich gilt grg(P, P).
+% groessergleich(?Peano1, ?Peano2)
 groessergleich(Peano1, Peano2) :- once(grg(Peano1, Peano2)).
 grg(P,P).
 grg(s(_), 0).
 grg(s(X), s(Y)) :- once(grg(X, Y)).
 
-%2>=1?
+% 2>=1?
 % ?- groessergleich(s(s(0)),s(0)). 
 % true.
 
-%2>=2?
+% 2>=2?
 % ?- groessergleich(s(s(0)),s(s(0))). 
 % true.
 
-%2>=3?
+% 2>=3?
 % ?- groessergleich(s(s(0)),s(s(s(0)))). 
 % false.
 
@@ -115,14 +114,14 @@ pmin(s(Peano1), s(Peano2), s(PeanoMin)) :-
 % ?- min(s(s(0)),s(0), s(0)).
 % true.
 
-%between(+PeanoMin, +PeanoMax, ?PeanoBetween)
-%bei gegebenem PeanoBetween wird ermittelt, ob dieses zwischen PeanoMax und PeanoMin liegt.
-%wenn PeanoBetween eine Variable ist, werden alle Peanozahlen zwischen den Grenzen ausgegeben
+% between(+PeanoMin, +PeanoMax, ?PeanoBetween)
+% bei gegebenem PeanoBetween wird ermittelt, ob dieses zwischen PeanoMax und PeanoMin liegt.
+% wenn PeanoBetween eine Variable ist, werden alle Peanozahlen zwischen den Grenzen ausgegeben
 between(PeanoMin, PeanoMax, PeanoBetween) :-
     groessergleich(PeanoMax, PeanoMin),%Abbruch falls PeanoMin groesser ist als PeanoMax
     (
-        PeanoBetween = PeanoMin;%unifiziert den gesuchten Wert mit der aktuell unteren Grenze
-        between(s(PeanoMin), PeanoMax, PeanoBetween)%Rekursionsschritt mit inkrementiertem PeanoMin
+        PeanoBetween = PeanoMin; % unifiziert den gesuchten Wert mit der aktuell unteren Grenze
+        between(s(PeanoMin), PeanoMax, PeanoBetween) % Rekursionsschritt mit inkrementiertem PeanoMin
     ).
 
 % Alle Zahlen zwischen 0 und s(s(s(0)))
