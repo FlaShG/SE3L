@@ -237,6 +237,19 @@ fertigungstiefen(TeilA, TeilB, Tiefe) :-
     fertigungstiefen(TeilA, X, BisDahin),
     Tiefe is BisDahin + 1.
 
+% ?- fertigungstiefen(wumme27, galaxy2004, X).
+% X = 4 ;
+% X = 3 ;
+% false.
+
+
+% 4.2
+alle_fertigungstiefen(TeilA, TeilB, Liste) :-
+    findall(Tiefe, fertigungstiefen(TeilA, TeilB, Tiefe), Liste).
+
+% ?- alle_fertigungstiefen(wumme27, galaxy2004, Liste).
+% Liste = [4, 3].
+
 % 4.3
 % TeilA muss kein Zulieferteil sein, TeilB kein Endprodukt,
 % da diese Vorgabe diese Prädikat ausschließlich eingeschränkt hätte.
@@ -250,12 +263,20 @@ wird_benoetigt_fuer(TeilA, TeilB, Anzahl) :-
     arbeitsschritt(TeilA, AnzahlAInX, _, X),
     wird_benoetigt_fuer(X, TeilB, AnzahlXInB),
     Anzahl is AnzahlAInX * AnzahlXInB.
-    
-benoetigte_Anzahl(TeilA, TeilB, Anzahl) :-
-    findall(Anzahl1,
-        wird_benoetigt_fuer(TeilA, TeilB, Anzahl1),
-        Liste),
-    sum_list(Liste, Anzahl).
 
 % Dieses Prädikat bildet die Summer aller Ergebnisse von wird_benoetigt_fuer,
 % also die Summe aller TeilA, die auf allen Pfaden zusammen in TeilB landen.
+% benoetigte_Anzahl(?TeilA, ?TeilB, -Anzahl)
+benoetigte_Anzahl(TeilA, TeilB, Anzahl) :-
+    findall(Anzahl1,
+        wird_benoetigt_fuer(TeilA, TeilB, Anzahl1),
+        Liste), % erzeugt eine Liste aus wird_benoetigt_fuer
+    sum_list(Liste, Anzahl). % summiert diese Liste
+
+% Anzahl an benoetigten wumme27 fuer ein galaxy2004
+% ?- benoetigte_Anzahl(wumme27, galaxy2004, X).
+% X = 10.
+
+% Anzahl aller benoetigten Teile fuer galaxy2004
+% ?- benoetigte_Anzahl(X, galaxy2004, X).
+% X = 238.
