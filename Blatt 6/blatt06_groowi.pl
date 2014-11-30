@@ -52,7 +52,7 @@ Von der Verstaendlichkeit aehneln sich die beiden Loesungen. Absteigend hat noch
 %%%%% Aufgabe 2
 %%%% 1)
 % Gibt alle natuerlichen Zahlen aus.
-% Wenn eine natuerliche Zahl als Resultat uebergebn wird, muss nach dem true mit . abgebrochen werden.
+% Wenn eine natuerliche Zahl als Resultat uebergeben wird, muss nach dem true mit . abgebrochen werden.
 % nat_zahl(?Resultat)
 nat_zahl(Resultat) :-
     nat_zahl_helper(0, Resultat).
