@@ -35,6 +35,9 @@
 %%%%% Aufgabe 2
 %%%% 1)
 % my_numlist(+Low, +High, -List)
+% Im Gegensatz zu dem Standard numlist gibt unser my_numlist bei Low=High nach dem Elemte an dieser Stelle noch ein false aus. 
+% Dies beeinträchtigt jedoch nicht die Funktionalität.
+
 my_numlist(Low, Low, [Low]).
 my_numlist(Low, High, List) :-
     once((
@@ -44,9 +47,13 @@ my_numlist(Low, High, List) :-
         List = [Low|Tail]
     )).
 
-% Tests (numlist hatte immer jeweils das gleiche Ergebnis):
+% Tests:
+% numlist hatte immer jeweils das gleiche Ergebnis.
+% Ausgenommen sind die Fälle mit Low=High, in denen unsere Variante
+% noch weiter unifizieren möchte.
 % ?- my_numlist(1,1,Liste).
-%    Liste = [1].
+%    Liste = [1];
+%    false.
 % ?- my_numlist(1,5,Liste).
 %    Liste = [1,2,3,4,5].
 % ?- my_numlist(1,0).
@@ -74,7 +81,10 @@ my_nth0(Index, List, Elem) :-
         my_nth0(IndexPlusOne, Tail, Elem)
     )).
 
-% Test (nth0 hatte immer jeweils das gleiche Ergebnis):
+% Tests:
+% nth0 hatte immer jeweils das gleiche Ergebnis.
+% Ausgenommen die Fälle mit Index=0, bei denen wie eben
+% noch ein weiteres Mal unifiziert werden will.
 % ?- my_nth0(0, [a,b,c,d,e], a).
 %    true;
 %    false.
