@@ -14,11 +14,15 @@
 % 4-elementige Liste =\= 5-elementige Liste
 % Die Unifikation schlägt fehl, da die Listen unterschiedlich lang sind.
 
-% ?- [D,D|E] = [[P,b], [a|Q], [Q,P], [P,Q], [P|Q], [Q,P]]
+% ?- [D,D|E] = [[P,b], [a|Q], [Q,P], [P,Q], [P|Q], [Q|P]]
 % D = [P,b]
 % D = [a|Q]
 % [P,b] = [a|Q]
 % P = a
 % [b] = Q
-% E = [[Q,P], [P,Q], [P|Q], [Q,P]]
-% 
+% E = [[Q,P],    [P,Q],    [P|Q],  [Q|P]]
+% E = [[[b], a], [a, [b]], [a, b], [[b]| a]]
+% Unifikation erfolgreich mit:
+% P = a
+% Q = [b]
+% E = [[[b], a], [a, [b]], [a, b], [[b]| a]]
