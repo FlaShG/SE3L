@@ -10,7 +10,7 @@
 % Aufgrund dieser Kollision schlägt die Unifikation fehl.
 
 % ?- [0, [T, 1, T], S, [1, S, 1]] =
-     [M, N, [M, 1, N], [1, 0, 1], N]
+%     [M, N, [M, 1, N], [1, 0, 1], N]
 % 4-elementige Liste =\= 5-elementige Liste
 % Die Unifikation schlägt fehl, da die Listen unterschiedlich lang sind.
 
@@ -26,3 +26,10 @@
 % P = a
 % Q = [b]
 % E = [[[b], a], [a, [b]], [a, b], [[b]| a]]
+
+% ?- [r|W] = [V,V,V].
+% W = [V, V]
+% V = r,
+% W = [r, r].
+
+%%%%% Aufgabe 2
