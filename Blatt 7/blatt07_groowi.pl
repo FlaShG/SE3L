@@ -102,3 +102,38 @@ my_nth0(Index, List, Elem) :-
 %    Elem = c.
 % ?- my_nth0(3, Liste, a).
 %    Liste = [_G19528, _G19531, _G19534, a|_G19538].
+
+%%%% 3)
+% my_list_to_set(+List, ?Set)
+my_list_to_set([], []).
+% my_list_to_set(List, List) :- is_set(List).
+my_list_to_set(List, Set) :-
+    once((
+        List \= [],
+        List = [First|Tail],
+        my_list_to_set(Tail, SetOfTail),
+        add_to_set(SetOfTail, First, Set)
+    )).
+
+% add_to_set(?Set, ?Elem, ?NewSet)    
+add_to_set(Set, Elem, Set) :-
+    member(Elem, Set).
+add_to_set(Set, Elem, [Elem|Set]) :-
+    not(member(Elem, Set)).
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
