@@ -35,6 +35,9 @@
 %%%%% Aufgabe 2
 %%%% 1)
 % my_numlist(+Low, +High, -List)
+% Im Gegensatz zu dem Standard numlist gibt unser my_numlist bei Low=High nach dem Elemte an dieser Stelle noch ein false aus. 
+% Dies beeinträchtigt jedoch nicht die Funktionalität.
+
 my_numlist(Low, Low, [Low]).
 my_numlist(Low, High, List) :-
     once((
@@ -43,7 +46,8 @@ my_numlist(Low, High, List) :-
     my_numlist(LessLow, High, Tail),
     List = [Low|Tail])).
 
-% Tests (numlist hatte immer jeweils das Gleiche Ergebnis):
+% Tests (numlist hatte immer jeweils das gleiche Ergebnis):
+% Ausgenommen sind die Fälle Low=High und 
 % ?- my_numlist(1,1,Liste).
 %    Liste = [1].
 % ?- my_numlist(1,5,Liste).
