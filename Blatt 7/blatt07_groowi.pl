@@ -31,6 +31,7 @@
 % W = [V, V]
 % V = r,
 % W = [r, r].
+% Unifikation Erfolgreich
 
 %%%%% Aufgabe 2
 %%%% 1)
@@ -105,35 +106,19 @@ my_nth0(Index, List, Elem) :-
 
 %%%% 3)
 % my_list_to_set(+List, ?Set)
+% Abbruch: Eine leere ist eine Menge
 my_list_to_set([], []).
 % my_list_to_set(List, List) :- is_set(List).
 my_list_to_set(List, Set) :-
-    once((
-        List \= [],
-        List = [First|Tail],
-        my_list_to_set(Tail, SetOfTail),
-        add_to_set(SetOfTail, First, Set)
+    once(( % begrenzen auf eine Ausgabe
+        List \= [], % Guard
+        List = [First|Tail], % Liste in das erste Element und den Rest aufsplitten
+        my_list_to_set(Tail, SetOfTail), % rekursiv mit dem Rest aufgerufen 
+        add_to_set(SetOfTail, First, Set) % Fügt das Ergebnis der Rekursion in das Set hinzu
     )).
 
 % add_to_set(?Set, ?Elem, ?NewSet)    
 add_to_set(Set, Elem, Set) :-
-    member(Elem, Set).
+    member(Elem, Set). % Gibt das Set zurück wenn das Element bereits enthalten ist
 add_to_set(Set, Elem, [Elem|Set]) :-
-    not(member(Elem, Set)).
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    not(member(Elem, Set)). % Fügt das Element der Liste hinzu, wenn es nicht Enthalente ist
