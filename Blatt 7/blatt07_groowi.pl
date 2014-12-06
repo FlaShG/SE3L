@@ -121,4 +121,4 @@ my_list_to_set(List, Set) :-
 add_to_set(Set, Elem, Set) :-
     member(Elem, Set). % Gibt das Set zurück wenn das Element bereits enthalten ist
 add_to_set(Set, Elem, [Elem|Set]) :-
-    not(member(Elem, Set)). % Fügt das Element der Liste hinzu, wenn es nicht Enthalente ist
+    not(member(Elem, Set)). % Fügt das Element dem Set hinzu, wenn es nicht enthalten ist
