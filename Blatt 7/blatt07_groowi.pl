@@ -166,3 +166,71 @@ my_ord_union(Set1, Set2, Union) :-
 
 
 %%%%% Aufgabe 3
+%%%% 1)
+% gerade(+Binaerzahl)
+gerade([0|_]).
+% ungerade(+Binaerzahl)
+ungerade([1|_]).
+
+% ?- gerade([0,1]).
+%    true.
+% ?- gerade([1,1]).
+%    false.
+% ?- ungerade([0,1]).
+%    false.
+% ?- ungerade([1,1]).
+%    true.
+
+%%%% 2)
+% doppelt(+Binaerzahl, -Doppelt)
+% doppelt(-BinaerZahl, +Doppelt)
+doppelt(Binaerzahl, [0|Binaerzahl]).
+
+% ?- doppelt([0,1,1], Z).
+%    Z = [0, 0, 1, 1].
+% ?- doppelt(Z, [0,1,1]).
+%    Z = [1, 1].
+
+%%%% 3)
+% gerade(+Binaerzahl, -Gerade)
+% Ersetze eine "führende 1" durch eine 0:
+mach_gerade([1|Rest], [0|Rest]).
+% Wenn die Zahl schon gerade ist, soll nicht false, sondern wieder
+% die Zahl als Ergebnis kommen:
+mach_gerade([0|Rest], [0|Rest]).
+
+% ?- mach_gerade([0,1,1], Z).
+%    Z = [0, 1, 1].
+% ?- mach_gerade([1,1,1], Z).
+%    Z = [0, 1, 1] ;
+%    false.
+
+%%%% 4)
+% binaerzahl(+Ding)
+binaerzahl(Ding) :-
+    once(
+        Ding = [0]; % Ausnahmefall, in dem eine "führende 0" ok ist.
+        binaerzahl_helper(Ding)
+    ).
+
+% binaerzahl_helper(+Ding) - Hilfsprädikat für alle Zahlen \= [0]
+binaerzahl_helper([1]).
+binaerzahl_helper([0|Rest]) :-
+    binaerzahl_helper(Rest).
+binaerzahl_helper([1|Rest]) :-
+    binaerzahl_helper(Rest).
+    
+
+% ?- binaerzahl([0]).
+%    true.
+% ?- binaerzahl([1]).
+%    true.
+% ?- binaerzahl([0, 1]).
+%    true.
+% ?- binaerzahl([1, 1]).
+%    true.
+
+% ?- binaerzahl([1, 0]).
+%    false.
+% ?- binaerzahl([0, 0]).
+%    false.
