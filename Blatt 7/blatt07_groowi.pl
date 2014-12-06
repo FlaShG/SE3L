@@ -275,3 +275,40 @@ binaer_zu_int_helper([1|Rest], Stelligkeit, Int) :-
 
 
 % int_zu_binaer(+Int, -Binaerzahl)
+int_zu_binaer(Int, BinaerZahl) :-
+    once(int_zu_binaer_helper(Int, BinaerZahl)).
+    
+% int_zu_binaer_helper(+Int, -BinaerZahl)
+int_zu_binaer_helper(0, []).
+int_zu_binaer_helper(1, [1]).
+int_zu_binaer_helper(Int, BinaerZahl) :-
+    Half is floor(Int / 2), % abgerundete Hälfte von Int
+    int_zu_binaer_helper(Half, RestZahl), % Die Bits rechts vom aktuellen Bit bilden sich aus besagter Hälfte
+    Bit is Int mod 2, % Das aktuelle bit ist 1 wenn Int ungerade, sonst 0
+    BinaerZahl = [Bit|RestZahl]. % Hänge das aktuelle Bit vorne an die anderen
+    
+% ?- int_zu_binaer(0, B).
+%    B = [].
+% ?- int_zu_binaer(1, B).
+%    B = [1].
+% ?- int_zu_binaer(2, B).
+%    B = [0, 1].
+% ?- int_zu_binaer(3, B).
+%    B = [1, 1].
+% ?- int_zu_binaer(4, B).
+%    B = [0, 0, 1].
+% ?- int_zu_binaer(5, B).
+%    B = [1, 0, 1].
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
