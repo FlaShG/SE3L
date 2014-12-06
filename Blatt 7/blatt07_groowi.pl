@@ -106,7 +106,7 @@ my_nth0(Index, List, Elem) :-
 
 %%%% 3)
 % my_list_to_set(+List, ?Set)
-% Abbruch: Eine leere ist eine Menge
+% Abbruch: Eine leere Liste ist eine Menge
 my_list_to_set([], []).
 % my_list_to_set(List, List) :- is_set(List).
 my_list_to_set(List, Set) :-
@@ -139,3 +139,25 @@ add_to_set(Set, Elem, [Elem|Set]) :-
 % ?- list_to_set([a,b,a,c], Set).
 % Set = [a,b,c].
 
+%%%% 4)
+% my_ord_union(+Set1, +Set2, -Union)
+% Abbruch: Union = Set1 wenn Set2 = []
+my_ord_union(Set1, [], Set1).
+my_ord_union(Set1, Set2, Union) :-
+    once((
+        Set2 \= [], % Guard
+        Set2 = [Element|Set2Tail], % Trenne Set2 in Element und Set2Tail
+        my_ord_union(Set1, Set2Tail, UnionWithoutElement), % Bilde die Union aus Set1 und Set2Tail, um die Union ohne das eben abgetrennte Element zu erhalten
+        add_to_set(UnionWithoutElement, Element, Union) % Füge noch das Element in die Union ein. 1-A-Beispiel für Nicht-Endrekursion.
+    )).
+
+% Tests:
+% Wie in 2.3 sind unsere Sets anders sortiert und der Rekursionsabbruch-Fall
+% mit Set2 = [] versucht ein Mal mehr zu unifizieren als nötig.
+% ?- my_ord_union([a,b,c], [], Union).
+%    Union = [a,b,c];
+%    false.
+% ?- my_ord_union([a,b,c], [a,c,e], Union).
+%    Union = [e, a, b, c].
+% ?- ord_union([a,b,c], [a,c,e], Union).
+%    Union = [a, b, c, e].
