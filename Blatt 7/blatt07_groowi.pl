@@ -117,8 +117,25 @@ my_list_to_set(List, Set) :-
         add_to_set(SetOfTail, First, Set) % Fügt das Ergebnis der Rekursion in das Set hinzu
     )).
 
-% add_to_set(?Set, ?Elem, ?NewSet)    
+% add_to_set(?Set, ?Elem, ?NewSet)
 add_to_set(Set, Elem, Set) :-
     member(Elem, Set). % Gibt das Set zurück wenn das Element bereits enthalten ist
 add_to_set(Set, Elem, [Elem|Set]) :-
     not(member(Elem, Set)). % Fügt das Element dem Set hinzu, wenn es nicht enthalten ist
+
+% Tests:
+% list_to_set hat ein weitestgehend ähnliches Verhalten.
+% Unterschiede: Die weitere Unifizierung bei der leeren Liste (s.o.),
+% sowie die Reihenfolge der Elemente im Ergebnis.
+% Wir haben uns um die Reihenfolge nicht weiter gekümmert, gemäß der mathematischen
+% Definition einer Menge, unsortiert zu sein.
+% ?- my_list_to_set([], Set).
+% Set = [];
+% false.
+% ?- my_list_to_set([a,b,c], Set).
+% Set = [a,b,c].
+% ?- my_list_to_set([a,b,a,c], Set).
+% Set = [b,a,c].
+% ?- list_to_set([a,b,a,c], Set).
+% Set = [a,b,c].
+
