@@ -111,10 +111,8 @@ my_nth0(Index, List, Elem) :-
 % Abbruch: Eine leere Liste ist eine Menge
 my_list_to_set([], []).
 % my_list_to_set(List, List) :- is_set(List).
-my_list_to_set(List, Set) :-
+my_list_to_set([First|Tail], Set) :-
     once(( % begrenzen auf eine Ausgabe
-        List \= [], % Guard
-        List = [First|Tail], % Liste in das erste Element und den Rest aufsplitten
         my_list_to_set(Tail, SetOfTail), % rekursiv mit dem Rest aufgerufen 
         add_to_set(SetOfTail, First, Set) % Fügt das Ergebnis der Rekursion in das Set hinzu
     )).
@@ -145,10 +143,8 @@ add_to_set(Set, Elem, [Elem|Set]) :-
 % my_ord_union(+Set1, +Set2, -Union)
 % Abbruch: Union = Set1 wenn Set2 = []
 my_ord_union(Set1, [], Set1).
-my_ord_union(Set1, Set2, Union) :-
+my_ord_union(Set1, [Element|Set2Tail], Union) :-
     once((
-        Set2 \= [], % Guard
-        Set2 = [Element|Set2Tail], % Trenne Set2 in Element und Set2Tail
         my_ord_union(Set1, Set2Tail, UnionWithoutElement), % Bilde die Union aus Set1 und Set2Tail, um die Union ohne das eben abgetrennte Element zu erhalten
         add_to_set(UnionWithoutElement, Element, Union) % Füge noch das Element in die Union ein. 1-A-Beispiel für Nicht-Endrekursion.
     )).
@@ -300,15 +296,49 @@ int_zu_binaer_helper(Int, BinaerZahl) :-
 % ?- int_zu_binaer(5, B).
 %    B = [1, 0, 1].
     
+%%%% 6)
+% volladdierer(+Bit1, +Bit2, +Uebertrag, -Ergebnis, -ErgebnisUebertrag)
+volladdierer(false, false, false, false, false).
+volladdierer(Bit1, Bit2, Uebertrag, true, false) :-
+    (Bit1, not(Bit2), not(Uebertrag));
+    (not(Bit1), Bit2, not(Uebertrag));
+    (not(Bit1), not(Bit2), Uebertrag).
+volladdierer(Bit1, Bit2, Uebertrag, false, true) :-
+    (not(Bit1), Bit2, Uebertrag);
+    (Bit1, not(Bit2), Uebertrag);
+    (Bit1, Bit2, not(Uebertrag)).
+volladdierer(true, true, true, true, true).
+
+% volladdierer_int(+Bit1, +Bit2, +Uebertrag, -Ergebnis, -ErgebnisUebertrag)
+volladdierer_int(Bit1, Bit2, Uebertrag, Ergebnis, ErgebnisUebertrag) :-
+    once(volladdierer(
+        Bit1 = 1,
+        Bit2 = 1,
+        Uebertrag = 1,
+        Ergebnis,
+        ErgebnisUebertrag
+    )).
+
+%%%% 7)
+% addiere_binaer(+Binaer1, +Binaer2, -Ergebnis)
+addiere_binaer(Binaer1, Binaer2, Ergebnis) :-
+    addiere_binaer(Rest1, Rest2, 0, Ergebnis).
     
+addiere_binaer(Binaer1, [], 0, Binaer1).
+addiere_binaer([], Binaer2, 0, Binaer2).
+addiere_binaer([Bit1|Rest1], [Bit2|Rest2], Uebertrag, Ergebnis) :-
+    volladdierer_int(Bit1, Bit2, Uebertrag, ErgebnisBit, ErgebnisUebertrag),
+    addiere_binaer(Rest1, Rest2, ErgebnisUebertrag, RestErgebnis),
+    Ergebnis = [ErgebnisBit|RestErgebnis].
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
