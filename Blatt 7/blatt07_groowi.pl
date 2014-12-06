@@ -209,7 +209,7 @@ mach_gerade([0|Rest], [0|Rest]).
 % binaerzahl(+Ding)
 binaerzahl(Ding) :-
     once(
-        Ding = [0]; % Ausnahmefall, in dem eine "führende 0" ok ist.
+        Ding = []; % Die 0
         binaerzahl_helper(Ding)
     ).
 
@@ -234,3 +234,44 @@ binaerzahl_helper([1|Rest]) :-
 %    false.
 % ?- binaerzahl([0, 0]).
 %    false.
+
+%%%% 5)
+% binaer_zu_int(+Binaerzahl, -Int)
+binaer_zu_int(Binaerzahl, Int) :-
+    once(binaer_zu_int_helper(Binaerzahl, 1, Int)).
+
+% binaer_zu_int_helper(+Binaerzahl, +Stelligkeit, -Int)
+% Simple Fälle: 0 und 1
+binaer_zu_int_helper([], _, 0).
+binaer_zu_int_helper([1], Stelligkeit, Stelligkeit).
+
+% 0 auf der linken Seite hat keinen Einfluss auf das Ergebnis,
+% also weiter mit den anderen Ziffern mit doppelter Stelligkeit.
+binaer_zu_int_helper([0|Rest], Stelligkeit, Int) :-
+    S is Stelligkeit * 2,
+    binaer_zu_int_helper(Rest, S, Int).
+    
+% Steht links eine 1, wird das Ergebnis der folgenden Ziffern
+% um die aktuelle Stelligkeit erhöht.
+binaer_zu_int_helper([1|Rest], Stelligkeit, Int) :-
+    S is Stelligkeit * 2,
+    binaer_zu_int_helper(Rest, S, RestInt),
+    Int is RestInt + Stelligkeit.
+
+% ?- binaer_zu_int([], Int).
+%    Int = 0.
+% ?- binaer_zu_int([0], Int).
+%    Int = 0.
+% ?- binaer_zu_int([1], Int).
+%    Int = 1.
+% ?- binaer_zu_int([1,0], Int).
+%    Int = 1.
+% ?- binaer_zu_int([0,1], Int).
+%    Int = 2.
+% ?- binaer_zu_int([1,1], Int).
+%    Int = 3.
+% ?- binaer_zu_int([0,0,1], Int).
+%    Int = 4.
+
+
+% int_zu_binaer(+Int, -Binaerzahl)
