@@ -1,5 +1,6 @@
 %%%%%% Sascha Graeff, Frederik Wille
 
+
 %%%%% Aufgabe 1
 % ?- [A,m,A] = [B,B,n]
 % 3-elementige Liste = 3-elementige Liste
@@ -32,6 +33,7 @@
 % V = r,
 % W = [r, r].
 % Unifikation Erfolgreich
+
 
 %%%%% Aufgabe 2
 %%%% 1)
@@ -161,3 +163,6 @@ my_ord_union(Set1, Set2, Union) :-
 %    Union = [e, a, b, c].
 % ?- ord_union([a,b,c], [a,c,e], Union).
 %    Union = [a, b, c, e].
+
+
+%%%%% Aufgabe 3
