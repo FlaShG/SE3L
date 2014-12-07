@@ -179,13 +179,32 @@ ungerade([1|_]).
 
 %%%% 2)
 % doppelt(+Binaerzahl, -Doppelt)
-% doppelt(-BinaerZahl, +Doppelt)
 doppelt(Binaerzahl, [0|Binaerzahl]).
 
 % ?- doppelt([0,1,1], Z).
 %    Z = [0, 0, 1, 1].
 % ?- doppelt(Z, [0,1,1]).
 %    Z = [1, 1].
+
+% halb(+Binaerzahl, -Haelfte)
+halb([], []).
+halb([1|Rest], Rest).
+halb([0|Rest], Rest).
+
+% ?- halb([], E).
+%    E = [].
+% ?- halb([1], E).
+%    E = [] ;
+%    false.
+% ?- halb([0,1], E).
+%    E = [1].
+% ?- halb([1,1], E).
+%    E = [1] ;
+%    false.
+% ?- halb([0,0,1], E).
+%    E = [0, 1].
+% ?- halb([0,1,1], E).
+%    E = [1, 1].
 
 %%%% 3)
 % gerade(+Binaerzahl, -Gerade)
@@ -341,11 +360,45 @@ addiere_binaer([Bit1|Rest1], [Bit2|Rest2], Uebertrag, Ergebnis) :-
     addiere_binaer(Rest1, Rest2, VAUebertrag, RestErgebnis),
     Ergebnis = [VAErgebnis|RestErgebnis].
 
-    
-    
-    
-    
-    
-    
+%%%% 8)
+% multipliziere(+Binaer1, +Binaer2, -Ergebnis)
+multipliziere(Binaer1, Binaer2, Ergebnis) :-
+    once(multipliziere(Binaer1, Binaer2, [], Ergebnis)).
 
-
+% multipliziere(+Binaer1, +Binaer2, -Ergebnis)    
+multipliziere([], _, Bisher, Bisher).
+multipliziere(_, [], Bisher, Bisher).
+multipliziere(Binaer1, Binaer2, Bisher, Ergebnis) :-
+    (
+        (
+            gerade(Binaer1),
+            Zwischen = Bisher
+        );
+        (
+            ungerade(Binaer1),
+            addiere_binaer(Bisher, Binaer2, Zwischen)
+        )
+    ),
+    halb(Binaer1, Next1),
+    doppelt(Binaer2, Next2),
+    (
+        (
+            Next1 \= [],
+            multipliziere(Next1, Next2, Zwischen, Ergebnis)
+        );
+        (
+            Next1 = [],
+            Ergebnis = Zwischen
+        )
+    ).
+    
+% ?- multipliziere([], [], E).
+%    E = [].
+% ?- multipliziere([], [1], E).
+%    E = [].
+% ?- multipliziere([1], [1], E).
+%    E = [1].
+% ?- multipliziere([0,1], [0,1], E).
+%    E = [0, 0, 1].
+% ?- multipliziere([1], [0,1], E).
+%    E = [0, 1].
