@@ -315,30 +315,41 @@ volladdierer_int(Bit1, Bit2, Uebertrag, Ergebnis, ErgebnisUebertrag) :-
         Bit1 = 1,
         Bit2 = 1,
         Uebertrag = 1,
-        Ergebnis,
+        ErgebnisBool,
         ErgebnisUebertrag
     )).
 
 %%%% 7)
 % addiere_binaer(+Binaer1, +Binaer2, -Ergebnis)
 addiere_binaer(Binaer1, Binaer2, Ergebnis) :-
-    addiere_binaer(Rest1, Rest2, 0, Ergebnis).
+    once(addiere_binaer(Binaer1, Binaer2, 0, Ergebnis)).
+    %umgedreht(GedrehtesErgebnis, Ergebnis).
     
-addiere_binaer(Binaer1, [], 0, Binaer1).
-addiere_binaer([], Binaer2, 0, Binaer2).
+% addiere_binaer(+Binaer1, +Binaer2, +Uebertrag, -Ergebnis)
+% Wenn Binaer1 = [] ist, tausche die Summanden
+addiere_binaer([], [Bit2|Rest2], Uebertrag, Ergebnis) :-
+    addiere_binaer([Bit2|Rest2], [], Uebertrag, Ergebnis).
+    
+% Drei Fälle, in denen Binaer2 = [] ist.
+addiere_binaer(Binaer1, [], 0, Binaer1). % mit 0 Übertrag
+addiere_binaer([0|Rest], [], 1, [1|Rest]). % Bei einem Übertrag von 1, ersetze die Einser-0 durch eine 1
+addiere_binaer([1|Rest], [], 1, [0,1|Rest]). % ...bzw. schiebe eine 0 vor die Einser-1.
+
+% Sind beide Zahlen > 0 (\= []), so werden sie so lange abgearbeitet, bis dies nicht mehr der Fall ist.
 addiere_binaer([Bit1|Rest1], [Bit2|Rest2], Uebertrag, Ergebnis) :-
-    volladdierer_int(Bit1, Bit2, Uebertrag, ErgebnisBit, ErgebnisUebertrag),
-    addiere_binaer(Rest1, Rest2, ErgebnisUebertrag, RestErgebnis),
-    Ergebnis = [ErgebnisBit|RestErgebnis].
+    volladdierer_int(Bit1, Bit2, Uebertrag, VAErgebnis, VAUebertrag),
+    addiere_binaer(Rest1, Rest2, VAUebertrag, RestErgebnis),
+    Ergebnis = [VAErgebnis|RestErgebnis].
+
+% umgedreht(+Liste, -Umgedreht)
+umgedreht(Liste, Umgedreht) :- umgedreht(Liste, Umgedreht, []).
+umgedreht([], Z, Z).
+umgedreht([H|T], Z, Acc) :- umgedreht(T, Z, [H|Acc]).
     
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
 
 
