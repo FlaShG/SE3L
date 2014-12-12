@@ -88,6 +88,7 @@ X = [0.5, -0.2, 0.4, -0.4, 0.23].
 unterschiedliche_vorzeichen(A,B) :- A < 0, B >= 0.
 unterschiedliche_vorzeichen(A,B) :- B < 0, A >= 0.
 
+nulldurchgaenge([], 0).
 nulldurchgaenge([_], 0).
 nulldurchgaenge([A,B|Rest], Durchgaenge) :-
     nulldurchgaenge([B|Rest], RestDurchgaenge),
