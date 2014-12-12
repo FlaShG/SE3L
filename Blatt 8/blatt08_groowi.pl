@@ -4,13 +4,35 @@
 %%%%% Aufgabe 1
 %%%% 1)
 
+
+
 % Multipliziert In mit Factor und gibt es als Out zurück.
 % multiply(+In, -Out, +Factor)
 multiply(In, Out, Factor) :- Out is In * Factor.
 
+/* TESTS
+?- multiply(3, X, 2).
+X = 6.
+
+?- multiply(2, X, 2).
+X = 4.
+*/
+
+
 % Zweistellige definition von abs
 % abs(+Num, ?Abs)
 abs(Num, Abs) :- Abs is abs(Num).
+
+/* TEST
+?- abs(-1,X).
+X = 1.
+
+?- abs(-1337,X).
+X = 1337.
+
+?- abs(1337,X).
+X = 1337.
+*/
 
 % apply_to_all(+InListe, +Goal, -OutListe)
 % jedes Prädikat auf eine leere Liste angewandt, ergibt die leere Liste
@@ -26,6 +48,11 @@ apply_to_all([InHead|InTail], Goal, [OutHead|OutTail]) :-
     call(G),
     % Rekursionsaufruf
     apply_to_all(InTail, Goal, OutTail).
+/*
+?- functor(Abs, abs, 2), apply_to_all([1,-2,3], Abs, X).
+Abs = abs(_G1050, _G1051),
+X = [1, 2, 3].
+*/
 
 
 % Normalisiert die Werte der Liste In auf den Wert Norm.
@@ -44,6 +71,17 @@ normalize(In, Norm, Out) :-
     arg(3, MultiplyWithFactor, Factor),
     % Multiplizieren aller Werte in der Liste
     apply_to_all(In, MultiplyWithFactor, Out).
+
+/*
+?- normalize([0.5, 0.2, 0.4, -0.4, 0.23], 1, X).
+X = [1.0, 0.4, 0.8, -0.8, 0.46].
+
+?- normalize([0.5, -0.2, 0.4, -0.4, 0.23], 2, X).
+X = [2.0, -0.8, 1.6, -1.6, 0.92].
+
+?- normalize([0.5, -0.2, 0.4, -0.4, 0.23], 0.5, X).
+X = [0.5, -0.2, 0.4, -0.4, 0.23].
+*/
     
     
 %%%% 2)
