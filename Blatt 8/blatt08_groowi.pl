@@ -77,3 +77,15 @@ ND = 2.
 ?- nulldurchgaenge([1,-1,1,2,1,-1], ND).
 ND = 3.
 */
+
+nulldurchgangsdichte(Liste, Dichte) :-
+    nulldurchgaenge(Liste, ND),
+    % Samples sind in 16kHz
+    % und 1600 Werte, also 0,1 Sekunde lang.
+    % Ergebnis soll in 1Hz sein
+    Dichte is ND * 10.
+    
+nulldurchgangsdichte_von_laut(Laut, Dichte) :-
+    sound(_, Laut, Liste),
+    nulldurchgangsdichte(Liste, Dichte).
+
