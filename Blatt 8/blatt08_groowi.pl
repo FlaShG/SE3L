@@ -158,8 +158,9 @@ Dichte = 480.
 % wie das "p" gesprochen wurde ("p" oder "peeh"), können wir kaum eine
 % geschicktere Grenze setzen.
 
+% ist_stimmhaft(?ID)
 ist_stimmhaft(ID) :-
     nulldurchgangsdichte(ID, Dichte),
-    Dichte < 800.
+    Dichte < 800. 
     
     
