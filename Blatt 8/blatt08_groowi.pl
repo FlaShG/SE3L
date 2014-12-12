@@ -28,7 +28,7 @@ apply_to_all([InHead|InTail], Goal, [OutHead|OutTail]) :-
     apply_to_all(InTail, Goal, OutTail).
 
 
-% passt die Pegel so an, dass an den gegebenen Normwert an
+% Normalisiert die Werte der Liste In auf den Wert Norm.
 % normalize(+In, +Norm, -Out)
 normalize(In, Norm, Out) :-
     % abs wird als zweistellig festgelegt.
