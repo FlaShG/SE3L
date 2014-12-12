@@ -159,7 +159,28 @@ Dichte = 480.
 % geschicktere Grenze setzen.
 
 ist_stimmhaft(ID) :-
-    nulldurchgangsdichte(ID, Dichte),
+    nulldurchgangsdichte_von_laut(ID, Dichte),
     Dichte < 800.
     
-    
+%%%% 4)
+ist_stimmlos(ID) :- not(ist_stimmhaft(ID)).
+
+/*
+?- sound(ID,_,_), ist_stimmhaft(ID).
+ID = 11 ;
+ID = 18 .
+*/
+
+/*
+?- sound(ID,_,_), ist_stimmlos(ID).
+ID = 12 ;
+ID = 13 ;
+ID = 14 ;
+ID = 15 ;
+ID = 16 ;
+ID = 17 ;
+false.
+*/
+
+% Unser Prädikat behauptet, dass die Sounds 11 und 18 stimmhaft sind.
+% Entsprechend sollen alle anderen stimmlos sein.
