@@ -31,3 +31,19 @@ normalize(In, Norm, Out) :-
     functor(MultiplyWithFactor, multiply, 3),
     arg(3, MultiplyWithFactor, Factor),
     apply_to_all(In, MultiplyWithFactor, Out).
+    
+    
+%%%% 2)
+unterschiedliche_vorzeichen(A,B) :- A < 0, B >= 0.
+unterschiedliche_vorzeichen(A,B) :- B < 0, A >= 0.
+
+nulldurchgaenge([_], 0).
+nulldurchgaenge([A,B|Rest], Durchgaenge) :-
+    nulldurchgaenge([B|Rest], RestDurchgaenge),
+    (
+        (
+            unterschiedliche_vorzeichen(A,B),
+            Durchgaenge is RestDurchgaenge + 1
+        );
+        Durchgaenge is RestDurchgaenge
+    ),!.
