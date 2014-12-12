@@ -124,7 +124,32 @@ nulldurchgangsdichte(Liste, Dichte) :-
     % Ergebnis soll in 1Hz sein
     Dichte is ND * 10.
     
-nulldurchgangsdichte_von_laut(Laut, Dichte) :-
-    sound(_, Laut, Liste),
+nulldurchgangsdichte_von_laut(ID, Dichte) :-
+    sound(ID, _, Liste),
     nulldurchgangsdichte(Liste, Dichte).
 
+/*
+?- nulldurchgangsdichte_von_laut(ID, Dichte).
+ID = 1,
+Dichte = 7970 ;
+ID = 2,
+Dichte = 7890 ;
+ID = 3,
+Dichte = 8310 ;
+ID = 4,
+Dichte = 1140 ;
+ID = 5,
+Dichte = 930 ;
+ID = 6,
+Dichte = 590 ;
+ID = 7,
+Dichte = 460 ;
+ID = 8,
+Dichte = 300 ;
+ID = 9,
+Dichte = 340 ;
+ID = 10,
+Dichte = 480.
+*/
+    
+%%%% 3)
