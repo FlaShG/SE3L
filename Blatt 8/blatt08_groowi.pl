@@ -128,6 +128,8 @@ nulldurchgangsdichte_von_laut(ID, Dichte) :-
     sound(ID, _, Liste),
     nulldurchgangsdichte(Liste, Dichte).
 
+
+%%%% 3)
 /*
 ?- nulldurchgangsdichte_von_laut(ID, Dichte).
 ID = 1,
@@ -152,4 +154,12 @@ ID = 10,
 Dichte = 480.
 */
     
-%%%% 3)
+% Die Grenze scheint etwa bei 800 zu liegen. Da wir einiges nicht wissen, z.B.,
+% wie das "p" gesprochen wurde ("p" oder "peeh"), können wir kaum eine
+% geschicktere Grenze setzen.
+
+ist_stimmhaft(ID) :-
+    nulldurchgangsdichte(ID, Dichte),
+    Dichte < 800.
+    
+    
