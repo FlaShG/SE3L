@@ -60,5 +60,20 @@ nulldurchgaenge([A,B|Rest], Durchgaenge) :-
         );
         Durchgaenge is RestDurchgaenge
     ),!.
-    
-    
+
+/* TESTS:
+?- nulldurchgaenge([1,-1], ND).
+ND = 1.
+
+?- nulldurchgaenge([1,-1,1], ND).
+ND = 2.
+
+?- nulldurchgaenge([1,-1,1,2], ND).
+ND = 2.
+
+?- nulldurchgaenge([1,-1,1,2,1], ND).
+ND = 2.
+
+?- nulldurchgaenge([1,-1,1,2,1,-1], ND).
+ND = 3.
+*/
