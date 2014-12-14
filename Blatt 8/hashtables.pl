@@ -54,3 +54,13 @@ get_from_bucket([[Key, Value]|_], Key, Value).
 get_from_bucket([_|OtherPairs], Key, Value) :-
     get_from_bucket(OtherPairs, Key, Value).
 
+%%%% 6)
+/*
+Man kann streambasiert mehrere Werte pro Schlüssel durch ; abfragen.
+*/
+
+%%%% 7)
+
+
+%%%% 8)
+
