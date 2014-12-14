@@ -60,7 +60,47 @@ Man kann streambasiert mehrere Werte pro Schlüssel durch ; abfragen.
 */
 
 %%%% 7)
+% Gibt streambasiert die Größen aller Buckets zurück
+% bucket_sizes(+Table, -Size)
+bucket_sizes([Bucket|[]], Size) :-
+    length(Bucket, Size),
+    !.
+bucket_sizes([Bucket|Tail], Size) :-
+    length(Bucket, Size);
+    bucket_sizes(Tail, Size).
 
+% Ermittelt die Größe des größten Buckets
+% max_bucket_size_in(+Table, -Size)
+max_bucket_size_in(Table, Size) :-
+    findall(S, bucket_sizes(Table, S), List),
+    max_list(List, Size).
+
+% ?- test_create_hashtable_from_data(T), axn_bucket_size_in(T, S).
+% T = [...],
+% S = 16.
+    
+% Ermittelt die Größe des kleinsten Buckets
+% min_bucket_size_in(+Table, -Size)
+min_bucket_size_in(Table, Size) :-
+    findall(S, bucket_sizes(Table, S), List),
+    min_list(List, Size).
+    
+% ?- test_create_hashtable_from_data(T), min_bucket_size_in(T, S).
+% T = [...],
+% S = 5.
+
+% Ermittelt die durchschnittliche Größe der Buckets
+% avg_bucket_size_in(+Table, -Size)
+avg_bucket_size_in(Table, Size) :-
+    findall(S, bucket_sizes(Table, S), List),
+    length(List, Length),
+    sum_list(List, Sum),
+    Size is Sum / Length.
+
+% ?- test_create_hashtable_from_data(T), avg_bucket_size_in(T, S).
+% T = [...],
+% S = 10.55.
+    
 
 %%%% 8)
 
