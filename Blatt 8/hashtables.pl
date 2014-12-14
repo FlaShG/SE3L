@@ -35,30 +35,40 @@ add_to_hashtable([Bucket|Tail], Pair, Index, [Bucket|NewTail]) :-
     add_to_hashtable(Tail, Pair, IndexMinusOne, NewTail).
     
 %%%% 4)
+% Erzeugt eine Hash-Tabelle aus einer Liste von Key-Value-Paaren.
 % create_hashtable_from_data(+KeyValuePairs, -Table)
 create_hashtable_from_data([], Table) :-
     create_hashtable(20, Table), !.
-    
+
 create_hashtable_from_data([KeyValuePair|OtherPairs], Table) :-
     create_hashtable_from_data(OtherPairs, T),
     add_to_hashtable(T, KeyValuePair, Table).
 
+% Erzeugt eine Hashtabelle aus den Daten aus testindex.pl
+% test_create_hashtable_from_data(-Table)
 test_create_hashtable_from_data(Table) :- index(L), create_hashtable_from_data(L, Table).
 
 %%%% 5)
+% Findet alle Schlüssel/Werte, die zum gegebenen Schlüssel/Wert passen
 % get_from_hashtable(+Table, ?Key, ?Value)
 get_from_hashtable(Table, Key, Value) :-
     hash(Key, Hash), % get the hash
     length(Table, BucketCount), % get the bucket count
     Index is Hash mod BucketCount, % calculate the bucket index
     get_from_hashtable(Table, Index, Key, Value).
-    
+
+% Findet alle Schlüssel/Werte, die zum gegebenen Schlüssel/Wert passen.
+% Gesucht wird nur im Bucket mit dem Index Index.
+% get_from_hashtable(+Table, +Index, ?Key, ?Value)
 get_from_hashtable([Bucket|_], 0, Key, Value) :-
     get_from_bucket(Bucket, Key, Value).
 get_from_hashtable([_|OtherBuckets], Index, Key, Value) :-
     IndexMinusOne is Index -1,
     get_from_hashtable(OtherBuckets, IndexMinusOne, Key, Value).
-    
+
+% Findet alle Schlüssel/Werte, die zum gegebenen Schlüssel/Wert passen.
+% Gesucht wird nur im gegebenen Bucket.
+% get_from_bucket(+Bucket, ?Key, ?Value)
 get_from_bucket([], _, _) :- !.
 get_from_bucket([[Key, Value]|_], Key, Value).
 get_from_bucket([_|OtherPairs], Key, Value) :-
