@@ -185,3 +185,8 @@ false.
 
 % Unser Prädikat behauptet, dass die Sounds 11 und 18 stimmhaft sind.
 % Entsprechend sollen alle anderen stimmlos sein.
+
+
+%%%%% Aufgabe 2
+
+%%%% 1)
