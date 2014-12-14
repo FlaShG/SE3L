@@ -1,28 +1,38 @@
+% Baut eine Hash-Tabelle mit Bucket Buckets
+% create_hashtable(+Buckets, -Table)
 create_hashtable(1, [[]]) :- !.
 create_hashtable(Buckets, [[]|Tail]) :-
     BucketsMinusOne is Buckets - 1,
     create_hashtable(BucketsMinusOne, Tail).
-    
+
+% Errechnet einen Hash für ein beliebiges Atom
+% hash(+Thing, -Hash)
 hash(Thing, Hash) :-
     atom_codes(Thing, Ascii),
     build_hash(Ascii, 1, Hash).
-    
+
+% Baut einen Hash aus einer Liste von Zahlen
+% build_hash(+List, +Index, -Hash)
 build_hash([], Index, Index).
 build_hash([Head|Tail], Index, Hash) :-
     IndexPlusOne is Index + 1,
     build_hash(Tail, IndexPlusOne, OtherHash),
     Hash is OtherHash + Index * Head.
-    
+
+% Fügt das Element (in Form von [Key, Value]) in die Hash-Tabelle Table ein, gibt das Ergebnis als NewTable zurück
+% add_to_hashtabke(+Table, +Pair, -NewTable)
 add_to_hashtable(Table, [Key, Value], NewTable) :-
     hash(Key, Hash), % get the hash
     length(Table, BucketCount), % get the bucket count
     Index is Hash mod BucketCount, % calculate the bucket index
     add_to_hashtable(Table, [Key, Value], Index, NewTable). % put the element in the right bucket
-    
-add_to_hashtable([Bucket|Tail], Element, 0, [[Element|Bucket]|Tail]) :- !.
-add_to_hashtable([Bucket|Tail], Element, Index, [Bucket|NewTail]) :-
+
+% Fügt das Element in die Hash-Tabelle Table ein, in den Bucket mit Index Index.
+% add_to_hashtable(+Table, +Pair, -NewTable)
+add_to_hashtable([Bucket|Tail], Pair, 0, [[Pair|Bucket]|Tail]) :- !.
+add_to_hashtable([Bucket|Tail], Pair, Index, [Bucket|NewTail]) :-
     IndexMinusOne is Index - 1,
-    add_to_hashtable(Tail, Element, IndexMinusOne, NewTail).
+    add_to_hashtable(Tail, Pair, IndexMinusOne, NewTail).
     
 %%%% 4)
 % create_hashtable_from_data(+KeyValuePairs, -Table)
