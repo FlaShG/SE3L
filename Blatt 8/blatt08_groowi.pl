@@ -204,6 +204,8 @@ hash(Thing, Hash) :-
     build_hash(Ascii, 1, Hash).
 
 % Baut einen Hash aus einer Liste von Zahlen
+% Formel:
+% f(A) := Summe[über i von 1 bis Länge(A)](A[i] * i)
 % build_hash(+List, +Index, -Hash)
 build_hash([], Index, Index).
 build_hash([Head|Tail], Index, Hash) :-
@@ -221,7 +223,9 @@ add_to_hashtable(Table, [Key, Value], NewTable) :-
 
 % Fügt das Element in die Hash-Tabelle Table ein, in den Bucket mit Index Index.
 % add_to_hashtable(+Table, +Pair, -NewTable)
+% Ist der Index 0, füge das Paar in den ersten Bucket ein
 add_to_hashtable([Bucket|Tail], Pair, 0, [[Pair|Bucket]|Tail]) :- !.
+% Ansonsten schaue dir rekursiv die anderen Buckets mit niedrigerem Index an
 add_to_hashtable([Bucket|Tail], Pair, Index, [Bucket|NewTail]) :-
     IndexMinusOne is Index - 1,
     add_to_hashtable(Tail, Pair, IndexMinusOne, NewTail).
@@ -268,8 +272,18 @@ get_from_bucket([_|OtherPairs], Key, Value) :-
 
 %%%% 6)
 /*
-Man kann streambasiert mehrere Werte pro Schlüssel durch ; abfragen.
+ Man kann streambasiert mehrere Werte pro Schlüssel durch ; abfragen.
 */
+
+% ?- test_create_hashtable_from_data(T), get_from_hashtable(T, machen, V).
+% T = [...],
+% V =  43;
+% T = [...],
+% V =  328;
+% T = [...],
+% V =  344;
+% T = [...] ;
+% false.
 
 %%%% 7)
 % Die Tests in dieser Teilaufgabe beziehen sich auf Hashtabellen mit 20 Buckets
