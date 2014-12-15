@@ -80,6 +80,10 @@ Man kann streambasiert mehrere Werte pro Schlüssel durch ; abfragen.
 */
 
 %%%% 7)
+% Die Tests in dieser Teilaufgabe beziehen sich auf Hashtabellen mit 20 Buckets
+% und folgender Hashfunktion:
+% f(A) := Summe[über i von 1 bis Länge(A)](A[i] * i)
+
 % Gibt streambasiert die Größen aller Buckets zurück
 % bucket_sizes(+Table, -Size)
 bucket_sizes([Bucket|[]], Size) :-
@@ -123,4 +127,43 @@ avg_bucket_size_in(Table, Size) :-
     
 
 %%%% 8)
+/*
+ Dass die Güte der Hash-Funktion und die Anzahl der Buckets einer Hash-Tabelle
+ ausschlaggebend für die Anzahl der entstehenden Kollisionen sind, ist in der
+ Theorie hinter der ganzen Sache fest verankert. Die Antwort ist also: Natürlich!
+*/
 
+% Test mit 50 statt 20 Buckets:
+% ?- test_create_hashtable_from_data(T), avg_bucket_size_in(T, S).
+% T = [...],
+% S = 4.22.
+% ?- test_create_hashtable_from_data(T), max_bucket_size_in(T, S).
+% T = [...],
+% S = 11.
+
+% Test mit 20 Buckets und Hash-Funktion:
+% f(A) := Summe[über i von 1 bis Länge(A)](A[i] * i * i)
+% ?- test_create_hashtable_from_data(T), avg_bucket_size_in(T, S).
+% T = [...],
+% S = 10.55.
+% ?- test_create_hashtable_from_data(T), max_bucket_size_in(T, S).
+% T = [...],
+% S = 21.
+
+% Test mit 50 Buckets und Hash-Funktion:
+% f(A) := Summe[über i von 1 bis Länge(A)](A[i] * i * i)
+% ?- test_create_hashtable_from_data(T), avg_bucket_size_in(T, S).
+% T = [...],
+% S = 4.22.
+% ?- test_create_hashtable_from_data(T), max_bucket_size_in(T, S).
+% T = [...],
+% S = 10.
+
+/*
+ Es ist klar erkennbar (und logisch), dass die Anzahl und die
+ Durchschnittsgröße der Buckets antiproportional sind.
+ Außerdem hat die Hash-Funktion einen Einfluss auf die maximale Befüllung von Buckets.
+ Bei 50 Buckets verringert sich die maximale Befüllung mit quadriertem Index-Term,
+ bei 20 Buckets erhöht sie sich. Besonders raffinierte Hash-Funktionen sind beide
+ Versionen nicht.
+*/
