@@ -28,3 +28,13 @@
 
 
 %%%% 2)
+% eukl(+X, +Y, -Result)
+eukl(X, Y, Result) :- eukl(X, Y, 0, Result).
+
+eukl([], [], Sum, Result) :- Result is sqrt(Sum).
+eukl([Head1|Tail1], [Head2|Tail2], Sum, Result) :-
+    NextSum is Sum + (Head1 - Head2) * (Head1 - Head2),
+    eukl(Tail1, Tail2, NextSum, Result).
+
+
+%%%% 3)
