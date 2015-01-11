@@ -52,3 +52,79 @@ eukl([Head1|Tail1], [Head2|Tail2], Sum, Result) :-
 
 
 %%%% 3)
+% naechsterNachbar()
+
+
+%%%% 4)
+
+
+%%%%% Aufgabe 2
+%%%% 1)
+k_naechste_nachbarn(Beobachtung, K, Nachbarn) :-
+    % finde alle potentiellen Nachbarn
+    findall([Klasse, Merkmale], d(Klasse, Merkmale), AlleFakten),
+    % starte das eigentliche Finden
+    knn(Beobachtung, K, AlleFakten, [] NachbarnMitAbstand),
+    % "formatiere" das Ergebnis. Siehe Kommentar des nächsten Prädikats
+    findall(Nachbar, member([Nachbar,_], NachbarnMitAbstand), Nachbarn).
+
+% knn(+Beobachtung, +K, +Rest, +Gefunden, -Ergebnis)
+% Rest ist die Menge der noch zu untersuchenden, potentiellen Nachbarn, in der Form [Klasse, Merkmale].
+% Gefunden ist eine Liste mit den bereits gefundenen Nachbarn (Akkumulator)
+% Ergebnis ist eine Liste aus Paaren in der Form [Nachbar, Abstand],
+% wobei Abstand der Abstand des Nachbars zur Beobachtung ist.
+% Rekursionsabschluss
+knn(_, _, [], Gefunden, Gefunden).
+% Ein gefundener Nachbar wird eingefügt, wenn wir sowieso erst weniger als K Ergebnisse haben
+knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
+    length(Gefunden, Length),
+    Length < K,
+    Nachbar = [Klasse, Merkmale],
+    Abstand = eukl(Beobachtung, Mekmale),
+    knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
+% Ein gefundener Nachbar wird, wenn wir schon K Nachbarn gefunden haben, nur dann eingefügt,
+% wenn er näher dran ist als einer der gefundenen Nachbarn.
+knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
+    length(Gefunden, Length),
+    Length >= K,
+    Nachbar = [_, Merkmale],
+    Abstand = eukl(Beobachtung, Mekmale),
+    (
+        Abstand < WeitesterAbstand
+        =>
+        (
+            Gefunden = [[Weitester, WeitesterAbstand]|AndereGefunden],
+            knn_einfuegen(AndereGefunden, Nachbar, NeuGefunden)
+        )
+        ;
+        NeuGefunden = Gefunden
+    ),
+    knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
+% knn_einfuegen(+Gefunden, +NachbarMitAbstand, -NeuGefunden)
+% Fügt den Nachbar in Gefunden ein und gibt das Ergebnis zurück. Der Nachbar in Form von [Nachbar, Abstand] wird dabei
+% in dem Abstand nach die Liste einsortiert. Der Nachbar mit dem niedrigsten Abstand steht am Listenanfang.
+knn_einfuegen([], NachbarMitAbstand, [NachbarMitAbstand]).
+knn_einfuegen([[Weitester,WeitesterAbstand]|Rest], [Nachbar,Abstand], NeuGefunden) :-
+    Abstand > WeitesterAbstand
+    =>
+        NeuGefunden = [[Nachbar, Abstand]|Rest]
+    ;
+        (
+            knn_einfuegen(Rest, [Nachbar,Abstand], RestGefunden),
+            NeuGefunden = [[Weitester,WeitesterAbstand]|RestGefunden]
+        ).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
