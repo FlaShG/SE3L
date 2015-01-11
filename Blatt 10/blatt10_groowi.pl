@@ -228,16 +228,47 @@ R = [[a, 10], [b, 8], [x, 7], [c, 5]].
 R = [[a, 10], [b, 8], [c, 5], [x, 2]].
 */
 
+%%%%% Aufgabe 3
+%%%% 1)
 
+ztransform(Wert, Varianz, Mittelwert, Z) :-
+    Z is (Wert - Mittelwert) / Varianz.
 
+normalize_plakat([A,B,C],[An,Bn,Cn]) :-
+    ztransform(A,50,50,An),
+    ztransform(B,2,0,Bn),
+    ztransform(C,3,3,Cn).
 
+normalize_plakat_beispiele([Klasse,Result]) :-
+    d(Klasse,Werte),
+    normalize_plakat(Werte,Result).
 
+%% Tests
+% ?- ztransform(75, 50, 50,X).
+% X = 0.5.
+% 
+% ?- ztransform(60, 50, 50,X).
+% X = 0.2.
+% 
+% ?- ztransform(10, 50, 50,X).
+% X = -0.8.
+% 
+% ?- ztransform(10, 50, 100,X).
+% X = -1.8.
 
+% ?- normalize_plakat([60,2,2],A).
+% A = [0.2, 1, -0.3333333333333333].
 
-
-
-
-
-
-
-
+% ?- normalize_plakat_beispiele(Result).
+% Result = [top, [0.2, 1, -0.3333333333333333]] ;
+% Result = [top, [0.1, 1, -1]] ;
+% Result = [top, [0.14, -1, 0.3333333333333333]] ;
+% Result = [ok, [-0.6, 1, -0.6666666666666666]] ;
+% Result = [ok, [0.04, -0.5, -0.6666666666666666]] ;
+% Result = [ok, [0.6, 0, 0.6666666666666666]] ;
+% Result = [ok, [0.1, -0.5, -1]] ;
+% Result = [ok, [-0.2, -1, -1]] ;
+% Result = [flop, [-0.9, 0.5, -1]] ;
+% Result = [flop, [0.6, 0, -1]] ;
+% Result = [flop, [0.34, -0.5, -1]] ;
+% Result = [flop, [0.6, 0, -0.6666666666666666]].
