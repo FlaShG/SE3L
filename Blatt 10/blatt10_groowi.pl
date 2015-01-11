@@ -50,6 +50,20 @@ eukl([Head1|Tail1], [Head2|Tail2], Sum, Result) :-
     NextSum is Sum + (Head1 - Head2) * (Head1 - Head2),
     eukl(Tail1, Tail2, NextSum, Result).
 
+% Tests:
+/*
+?- eukl([1,2,3], [1,2,3], R).
+R = 0.0.
+
+?- eukl([1,2,3], [2,2,3], R).
+R = 1.0.
+
+?- eukl([1,2,3], [2,3,3], R).
+R = 1.4142135623730951.
+
+?- eukl([1,2,3,0], [2,3,3,0], R).
+R = 1.4142135623730951.
+*/
 
 %%%% 3)
 % naechsterNachbar()
@@ -82,7 +96,7 @@ knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     Length < K,
     % Wir haben noch keine K Nachbarn, also füge [Nachbar, Abstand] in Gefunden ein
     Nachbar = [_, Merkmale],
-    Abstand = eukl(Beobachtung, Merkmale),
+    Abstand is eukl(Beobachtung, Merkmale),
     knn_einfuegen(Gefunden, [Nachbar, Abstand], NeuGefunden),
     % Finde mehr Nachbarn
     knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
@@ -96,7 +110,7 @@ knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     Length >= K,
     % Wir haben schon K Nachbarn, also vergleiche mit dem am weitesten entfernten unter den bereits gefundenen
     Nachbar = [_, Merkmale],
-    Abstand = eukl(Beobachtung, Merkmale),
+    Abstand is eukl(Beobachtung, Merkmale),
     Gefunden = [[_, WeitesterAbstand]|AndereGefunden],
     (
         Abstand < WeitesterAbstand
