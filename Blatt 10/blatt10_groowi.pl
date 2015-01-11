@@ -46,6 +46,7 @@ d(flop, [80, 0, 1]).
 eukl(X, Y, Result) :- eukl(X, Y, 0, Result).
 
 eukl([], [], Sum, Result) :- Result is sqrt(Sum).
+
 eukl([Head1|Tail1], [Head2|Tail2], Sum, Result) :-
     NextSum is Sum + (Head1 - Head2) * (Head1 - Head2),
     eukl(Tail1, Tail2, NextSum, Result).
@@ -74,13 +75,32 @@ R = 1.4142135623730951.
 
 %%%%% Aufgabe 2
 %%%% 1)
+% k_naechste_nachbarn(+Beobachtung, +K, -Nachbarn)
+% Findet die nächsten K Nachbarn zur gegebenen Beobachtung in der Datenbasis.
+% Nachbarn unifiziert zu einer Liste mit K Elementen der Form [Klasse, Merkmale].
+% Das erste Listenelement ist dabei der am weitesten entfernte der K Nachbarn,
+% das letzte Element der nächste Nachbar.
 k_naechste_nachbarn(Beobachtung, K, Nachbarn) :-
     % finde alle potentiellen Nachbarn
     findall([Klasse, Merkmale], d(Klasse, Merkmale), AlleFakten),
     % starte das eigentliche Finden
     knn(Beobachtung, K, AlleFakten, [], NachbarnMitAbstand),
     % "formatiere" das Ergebnis. Siehe Kommentar des nächsten Prädikats
-    findall(Nachbar, member([Nachbar,_], NachbarnMitAbstand), Nachbarn).
+    findall(Nachbar, member([Nachbar,_], NachbarnMitAbstand), Nachbarn),
+    !.
+
+% Tests:
+/*
+?- k_naechste_nachbarn([20,2,3], 3, R).
+R = [[ok, [40, -2, 0]], [flop, [5, 1, 0]], [ok, [20, 2, 1]]].
+
+?- k_naechste_nachbarn([40,2,3], 3, R).
+R = [[top, [55, 2, 0]], [ok, [52, -1, 1]], [ok, [40, -2, 0]]].
+
+?- k_naechste_nachbarn([40,2,3], 4, R).
+R = [[ok, [55, -1, 0]], [top, [55, 2, 0]], [ok, [52, -1, 1]], [ok, [40, -2, 0]]].
+*/
+% Diese Tests sind implizit auch Tests für das Unterprädikat knn/5.
 
 % knn(+Beobachtung, +K, +Rest, +Gefunden, -Ergebnis)
 % Rest ist die Menge der noch zu untersuchenden, potentiellen Nachbarn, in der Form [Klasse, Merkmale].
@@ -96,7 +116,7 @@ knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     Length < K,
     % Wir haben noch keine K Nachbarn, also füge [Nachbar, Abstand] in Gefunden ein
     Nachbar = [_, Merkmale],
-    Abstand is eukl(Beobachtung, Merkmale),
+    eukl(Beobachtung, Merkmale, Abstand),
     knn_einfuegen(Gefunden, [Nachbar, Abstand], NeuGefunden),
     % Finde mehr Nachbarn
     knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
@@ -110,7 +130,7 @@ knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     Length >= K,
     % Wir haben schon K Nachbarn, also vergleiche mit dem am weitesten entfernten unter den bereits gefundenen
     Nachbar = [_, Merkmale],
-    Abstand is eukl(Beobachtung, Merkmale),
+    eukl(Beobachtung, Merkmale, Abstand),
     Gefunden = [[_, WeitesterAbstand]|AndereGefunden],
     (
         Abstand < WeitesterAbstand
