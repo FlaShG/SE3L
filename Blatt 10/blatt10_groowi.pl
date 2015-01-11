@@ -117,7 +117,7 @@ knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
 % in dem Abstand nach die Liste einsortiert. Der Nachbar mit dem niedrigsten Abstand steht am Listenanfang.
 knn_einfuegen([], NachbarMitAbstand, [NachbarMitAbstand]).
 knn_einfuegen([Naechster|Rest], [Nachbar,Abstand], NeuGefunden) :-
-    Naechster = [Weitester,WeitesterAbstand],
+    Naechster = [_,WeitesterAbstand],
     Abstand > WeitesterAbstand
     ->
         % Ist der einzufügende Nachbar weiter weg als der überprüfte in der Liste,
@@ -131,6 +131,17 @@ knn_einfuegen([Naechster|Rest], [Nachbar,Abstand], NeuGefunden) :-
             NeuGefunden = [Naechster|RestGefunden]
         ).
 
+% Tests:
+/*
+?- knn_einfuegen([[a, 10],[b, 8], [c, 5]], [x, 11], R).
+R = [[x, 11], [a, 10], [b, 8], [c, 5]].
+
+?- knn_einfuegen([[a, 10],[b, 8], [c, 5]], [x, 7], R).
+R = [[a, 10], [b, 8], [x, 7], [c, 5]].
+
+?- knn_einfuegen([[a, 10],[b, 8], [c, 5]], [x, 2], R).
+R = [[a, 10], [b, 8], [c, 5], [x, 2]].
+*/
 
 
 
