@@ -68,7 +68,9 @@ R = 1.4142135623730951.
 
 %%%% 3)
 % naechsterNachbar()
-
+alleAbstaende(Test, [Klasse,EuklResult]) :- 
+    d(Klasse,Daten),
+    eukl(Test, Daten, EuklResult).
 
 %%%% 4)
 
