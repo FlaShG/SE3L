@@ -67,12 +67,61 @@ R = 1.4142135623730951.
 */
 
 %%%% 3)
-% naechsterNachbar()
+% brechnet fuer jedes Trainingsbeispiel den Abstand zum Testbeispiel
+% alleAbstaende(+Test, -[Klasse,EuklResult])
 alleAbstaende(Test, [Klasse,EuklResult]) :- 
     d(Klasse,Daten),
     eukl(Test, Daten, EuklResult).
 
+%% Tests 
+% ?- alleAbstaende([40,0,1],X).
+% X = [top, 20.12461179749811] ;
+% X = [top, 15.165750888103101] ;
+% X = [top, 17.378147196982766] ;
+% X = [ok, 20.09975124224178] ;
+% X = [ok, 12.041594578792296] ;
+% X = [ok, 40.19950248448356] ;
+% X = [ok, 15.066519173319364] ;
+% X = [ok, 2.23606797749979] ;
+% X = [flop, 35.02855977627399] ;
+% X = [flop, 40.01249804748511] ;
+% X = [flop, 27.03701166919155] ;
+% X = [flop, 40.0].
+
+% ?- alleAbstaende([100,2,0],X).
+% X = [top, 40.049968789001575] ;
+% X = [top, 45.0] ;
+% X = [top, 43.37049688440288] ;
+% X = [ok, 80.00624975587844] ;
+% X = [ok, 48.104053883222775] ;
+% X = [ok, 20.71231517720798] ;
+% X = [ok, 45.09988913511872] ;
+% X = [ok, 60.13318551349163] ;
+% X = [flop, 95.00526301210897] ;
+% X = [flop, 20.09975124224178] ;
+% X = [flop, 33.13608305156178] ;
+% X = [flop, 20.12461179749811].
+
+
 %%%% 4)
+% findet den naechsten Nachbar zum Testbeispiel
+% direkter_Nachbar(+Test, -[Klasse, Min])
+direkter_Nachbar(Test, [Klasse,Min]) :-
+    % packe alle gefundenen Abstaende in eine List
+    findall(A, alleAbstaende(Test, [_,A]), B),
+    % finde das minimum dieser Liste
+    min_list(B, Min),
+    % finde die Klasse fuer das Minimum
+    alleAbstaende(Test, [Klasse,Min]).
+
+%% Tests
+% ?- direkter_Nachbar([40,0,1],X).
+% X = [ok, 2.23606797749979] ;
+% false.
+
+% ?- direkter_Nachbar([100,2,0],X).
+% X = [flop, 20.09975124224178] ;
+% false.
 
 
 %%%%% Aufgabe 2
