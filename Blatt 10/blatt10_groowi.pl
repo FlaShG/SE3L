@@ -80,40 +80,55 @@ knn(_, _, [], Gefunden, Gefunden).
 knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     length(Gefunden, Length),
     Length < K,
+    % Wir haben noch keine K Nachbarn, also füge [Nachbar, Abstand] in Gefunden ein
     Nachbar = [_, Merkmale],
     Abstand = eukl(Beobachtung, Merkmale),
     knn_einfuegen(Gefunden, [Nachbar, Abstand], NeuGefunden),
+    % Finde mehr Nachbarn
     knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
     
 % Ein gefundener Nachbar wird, wenn wir schon K Nachbarn gefunden haben, nur dann eingefügt,
 % wenn er näher dran ist als einer der gefundenen Nachbarn.
+% Da der am weitesten entfernte Nachbar am Listenanfang von Gefunden steht,
+% wird dieser zum Vergleich verwendet und ggf. aus der Liste gestrichen.
 knn(Beobachtung, K, [Nachbar|Rest], Gefunden, Ergebnis) :-
     length(Gefunden, Length),
     Length >= K,
+    % Wir haben schon K Nachbarn, also vergleiche mit dem am weitesten entfernten unter den bereits gefundenen
     Nachbar = [_, Merkmale],
     Abstand = eukl(Beobachtung, Merkmale),
     Gefunden = [[_, WeitesterAbstand]|AndereGefunden],
     (
         Abstand < WeitesterAbstand
         ->
+            % Füge [Nachbar,Abstand] in AndereGefunden ein.
+            % In AndereGefunden fehlt bereits der bisher am weitesten entfernte Nachbar
             knn_einfuegen(AndereGefunden, [Nachbar,Abstand], NeuGefunden)
         ;
+            % Keine Änderungen im Ergebnis, wenn der aktuell betrachtete Nachbar
+            % weiter eg ist als der bisher am weitesten entfernte
             NeuGefunden = Gefunden
     ),
+    % Finde mehr Nachbarn
     knn(Beobachtung, K, Rest, NeuGefunden, Ergebnis).
     
 % knn_einfuegen(+Gefunden, +NachbarMitAbstand, -NeuGefunden)
 % Fügt den Nachbar in Gefunden ein und gibt das Ergebnis zurück. Der Nachbar in Form von [Nachbar, Abstand] wird dabei
 % in dem Abstand nach die Liste einsortiert. Der Nachbar mit dem niedrigsten Abstand steht am Listenanfang.
 knn_einfuegen([], NachbarMitAbstand, [NachbarMitAbstand]).
-knn_einfuegen([[Weitester,WeitesterAbstand]|Rest], [Nachbar,Abstand], NeuGefunden) :-
+knn_einfuegen([Naechster|Rest], [Nachbar,Abstand], NeuGefunden) :-
+    Naechster = [Weitester,WeitesterAbstand],
     Abstand > WeitesterAbstand
     ->
-        NeuGefunden = [[Nachbar, Abstand]|Rest]
+        % Ist der einzufügende Nachbar weiter weg als der überprüfte in der Liste,
+        % füge ihn vor dem überprüften ein
+        NeuGefunden = [[Nachbar, Abstand],Naechster|Rest]
     ;
+        % Ansonsten: Füge den neuen Nachbarn in die Restliste ein und lasse den
+        % überprüften davor stehen, denn er ist weiter weg.
         (
             knn_einfuegen(Rest, [Nachbar,Abstand], RestGefunden),
-            NeuGefunden = [[Weitester,WeitesterAbstand]|RestGefunden]
+            NeuGefunden = [Naechster|RestGefunden]
         ).
 
 
