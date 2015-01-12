@@ -231,44 +231,81 @@ R = [[a, 10], [b, 8], [c, 5], [x, 2]].
 %%%%% Aufgabe 3
 %%%% 1)
 
-ztransform(Wert, Varianz, Mittelwert, Z) :-
-    Z is (Wert - Mittelwert) / Varianz.
+% mittelwert(+Werte, -Mittelwert)
+mittelwert(Werte, Mittelwert) :-
+    sum_list(Werte, Summe),
+    length(Werte, Anzahl),
+    Mittelwert is Summe / Anzahl.
 
-normalize_plakat([A,B,C],[An,Bn,Cn]) :-
-    ztransform(A,50,50,An),
-    ztransform(B,2,0,Bn),
-    ztransform(C,3,3,Cn).
+% varianz(+Werte, +Mittelwert, -Varianz)
+% Um in diesem Kontext den Mittelwert nicht zwei Mal berechnen zu lassen,
+% wird er hier wiederverwendet.
+varianz(Werte, Mittelwert, Varianz) :-
+    findall(QuadrierteAbweichung,
+            (
+                member(Wert, Werte),
+                Abweichung is Wert - Mittelwert,
+                QuadrierteAbweichung is Abweichung * Abweichung
+            ),
+            Abweichungen),
+    sum_list(Abweichungen, Summe),
+    length(Werte, Anzahl),
+    Varianz is Summe / Anzahl.
 
-normalize_plakat_beispiele([Klasse,Result]) :-
-    d(Klasse,Werte),
-    normalize_plakat(Werte,Result).
+% Vorberechnungen für z-Transformation, zusammengefasst
+z_pre(Werte, Mittelwert, Varianz) :-
+    mittelwert(Werte, Mittelwert),
+    varianz(Werte, Mittelwert, Varianz).
 
-%% Tests
-% ?- ztransform(75, 50, 50,X).
-% X = 0.5.
-% 
-% ?- ztransform(60, 50, 50,X).
-% X = 0.2.
-% 
-% ?- ztransform(10, 50, 50,X).
-% X = -0.8.
-% 
-% ?- ztransform(10, 50, 100,X).
-% X = -1.8.
+zTransformation(Werte, TransformierteWerte) :-
+    z_pre(Werte, Mittelwert, Varianz),
+    findall(TransformierterWert,
+            (
+                member(Wert, Werte),
+                TransformierterWert is (Wert - Mittelwert) / Varianz
+            ),
+            TransformierteWerte).
 
-% ?- normalize_plakat([60,2,2],A).
-% A = [0.2, 1, -0.3333333333333333].
-
-% ?- normalize_plakat_beispiele(Result).
-% Result = [top, [0.2, 1, -0.3333333333333333]] ;
-% Result = [top, [0.1, 1, -1]] ;
-% Result = [top, [0.14, -1, 0.3333333333333333]] ;
-% Result = [ok, [-0.6, 1, -0.6666666666666666]] ;
-% Result = [ok, [0.04, -0.5, -0.6666666666666666]] ;
-% Result = [ok, [0.6, 0, 0.6666666666666666]] ;
-% Result = [ok, [0.1, -0.5, -1]] ;
-% Result = [ok, [-0.2, -1, -1]] ;
-% Result = [flop, [-0.9, 0.5, -1]] ;
-% Result = [flop, [0.6, 0, -1]] ;
-% Result = [flop, [0.34, -0.5, -1]] ;
-% Result = [flop, [0.6, 0, -0.6666666666666666]].
+% normalisiere_daten(-NormalisierteDaten)
+% Normalisiert die Merkmale der Daten in der Datenbasis.
+normalisiere_daten(NormalisierteDaten) :-
+    % Mache eine Liste mit allen Daten
+    findall([Klasse, Merkmale], d(Klasse, Merkmale), Daten),
+    
+    % Finde Mittelwert und Varianz für Merkmal 1
+    findall(Merkmal,
+            (
+                member(D, Daten),
+                D = [_, [Merkmal|_]]
+            ),
+            Merkmale1),
+    z_pre(Merkmale1, Mittelwert1, Varianz1),
+    
+    % Finde Mittelwert und Varianz für Merkmal 2
+    findall(Merkmal,
+            (
+                member(D, Daten),
+                D = [_, [_,Merkmal|_]]
+            ),
+            Merkmale2),
+    z_pre(Merkmale2, Mittelwert2, Varianz2),
+    
+    % Finde Mittelwert und Varianz für Merkmal 3
+    findall(Merkmal,
+            (
+                member(D, Daten),
+                D = [_, [_,_,Merkmal]]
+            ),
+            Merkmale3),
+    z_pre(Merkmale3, Mittelwert3, Varianz3),
+    
+    % Normalisiere die Daten
+    findall([Klasse, [NMerkmal1,NMerkmal2,NMerkmal3]],
+            (
+                member(D, Daten),
+                D = [Klasse, [Merkmal1,Merkmal2,Merkmal3]],
+                NMerkmal1 is (Merkmal1 - Mittelwert1) / Varianz1,
+                NMerkmal2 is (Merkmal2 - Mittelwert2) / Varianz2,
+                NMerkmal3 is (Merkmal3 - Mittelwert3) / Varianz3
+            ),
+            NormalisierteDaten).
