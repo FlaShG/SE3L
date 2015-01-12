@@ -228,6 +228,18 @@ R = [[a, 10], [b, 8], [x, 7], [c, 5]].
 R = [[a, 10], [b, 8], [c, 5], [x, 2]].
 */
 
+%%%% 2)
+klasse_von(Beobachtung, K, Klasse) :-
+    k_naechste_nachbarn(Beobachtung, K, Nachbarn),
+    setof([K, Anzahl],
+          (
+            member([K, _], Nachbarn),
+            findall(K2, (member([K2, _], K2 = K), Nachbarn)),
+            length(Nachbarn, Anzahl)
+          ),
+          Klassen),
+    
+
 %%%%% Aufgabe 3
 %%%% 1)
 
