@@ -106,7 +106,7 @@ alleAbstaende(Test, [Klasse,EuklResult]) :-
 %%%% 4)
 % findet den naechsten Nachbar zum Testbeispiel
 % direkter_Nachbar(+Test, -[Klasse, Min])
-direkter_Nachbar(Test, [Klasse,Min]) :-
+direkter_Nachbar(Test, Klasse) :-
     % packe alle gefundenen Abstaende in eine List
     findall(A, alleAbstaende(Test, [_,A]), B),
     % finde das minimum dieser Liste
@@ -116,11 +116,11 @@ direkter_Nachbar(Test, [Klasse,Min]) :-
 
 %% Tests
 % ?- direkter_Nachbar([40,0,1],X).
-% X = [ok, 2.23606797749979] ;
+% X = ok ;
 % false.
 
 % ?- direkter_Nachbar([100,2,0],X).
-% X = [flop, 20.09975124224178] ;
+% X = flop ;
 % false.
 
 
